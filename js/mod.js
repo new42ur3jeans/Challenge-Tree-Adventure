@@ -18,6 +18,8 @@ let VERSION = {
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+    <h3>v1.1.2: Hotfix?</h3><br>
+        - changed the line displaying at the top of the page because the NaN bug is dead lol.<br>
 	<h3>v1.1.1: Hotfix</h3><br>
 		- Put back a forgotten line break on one of the challenges.<br>
 		- Corrected the Author's Discord username.<br>
@@ -83,7 +85,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Try to catch the NaN bug!"
+	"Nope, no real endgame here!"
 ]
 
 // Determines when the game "ends"
