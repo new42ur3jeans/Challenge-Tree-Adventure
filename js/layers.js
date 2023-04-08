@@ -378,7 +378,12 @@ addLayer("III", {
             canComplete: function() {return player[this.layer].formpts.gte(new Decimal.pow(1000, challengeCompletions("III", 13) + 1)) },//always does 1 at a time, check if points > req},
             goalDescription: function() {return "f(t) >= " +  format(new Decimal.pow(1000, challengeCompletions("III", 13) + 1))},
             rewardDescription: function() {return "Adds 1 to the a, b and c limit per completion, AND f(t) multiplies Tier 2 Power gain by " + format((new Decimal.pow(2,challengeCompletions("III",13)).sub(1)).times(player[this.layer].formpts.plus(1))) +"x."},
-            onEnter() {player[this.layer].formpts = new Decimal(0)},
+            onEnter() {
+                player[this.layer].formpts = new Decimal(0)
+                if (player[this.layer].formB == 0){
+                    player[this.layer].formB = 1
+                }
+            },
             unlocked() {return hasMilestone(this.layer,2)}
         },
         14: {
@@ -412,6 +417,302 @@ addLayer("III", {
         },      
     },
 
+    bars: {
+        a: {
+            direction: RIGHT,
+            width: 300,
+            height: 50,
+            progress() {
+                return new Decimal(player[this.layer].formA).div(tmp.III.maxFormulaValue)
+            },
+            display() {
+                return "a: " +  format(new Decimal(player[this.layer].formA)) + "/" + format(tmp.III.maxFormulaValue);
+            },
+            baseStyle: {
+                "background-color": "#777777"
+            },
+            fillStyle: {
+                "background-color": "#FF0000"
+            },
+            textStyle: {
+                "color": "#000000"
+            }
+        },
+        b: {
+            direction: RIGHT,
+            width: 300,
+            height: 50,
+            progress() {
+                return new Decimal(player[this.layer].formB).div(tmp.III.maxFormulaValue)
+            },
+            display() {
+                return "b: " + format(player[this.layer].formB) + "/" + format(tmp.III.maxFormulaValue)
+            },
+            baseStyle: {
+                "background-color": "#777777"
+            },
+            fillStyle: {
+                "background-color": "#00FF00"
+            },
+            textStyle: {
+                "color": "#000000"
+            }
+        },
+        c: {
+            direction: RIGHT,
+            width: 300,
+            height: 50,
+            progress() {
+                return new Decimal(player[this.layer].formC).div(tmp.III.maxFormulaValue)
+            },
+            display() {
+                return "c: " + format(player[this.layer].formC) + "/" + format(tmp.III.maxFormulaValue)
+            },
+            baseStyle: {
+                "background-color": "#777777"
+            },
+            fillStyle: {
+                "background-color": "#00FFFF"
+            },
+            textStyle: {
+                "color": "#000000"
+            }
+        }
+    },
+    clickables: {
+        rows: 3,
+        cols: 5,
+        11: {
+            display() {
+                return "<h1><b>0</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formA > 0
+            },
+            onClick(){
+                player[this.layer].formA = 0
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        12: {
+            display() {
+                return "<h1><b>HALF</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formA > 0
+            },
+            onClick(){
+                player[this.layer].formA = Math.ceil(player[this.layer].formA / 2)
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        13: {
+            display() {
+                return "<h1><b>-</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formA > 0
+            },
+            onClick(){
+                player[this.layer].formA = player[this.layer].formA - 1
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        14: {
+            display() {
+                return "<h1><b>+</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formA < tmp.III.maxFormulaValue
+            },
+            onClick(){
+                player[this.layer].formA = player[this.layer].formA + 1
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        15: {
+            display() {
+                return "<h1><b>MAX</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formA < tmp.III.maxFormulaValue
+            },
+            onClick(){
+                player[this.layer].formA = tmp.III.maxFormulaValue
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        21: {
+            display() {
+                return "<h1><b>0</b></h1>"
+            },
+            canClick() {
+                return (player[this.layer].formB > 0 && !inChallenge("III", 13))
+            },
+            onClick(){
+                player[this.layer].formB = 0
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        22: {
+            display() {
+                return "<h1><b>HALF</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formB > 0
+            },
+            onClick(){
+                player[this.layer].formB = Math.ceil(player[this.layer].formB / 2)
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        23: {
+            display() {
+                return "<h1><b>-</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formB > 0
+            },
+            onClick(){
+                if (inChallenge("III",13) &&(player[this.layer].formB == 1)) {
+                    player[this.layer].formB = 1
+                } else {
+                    player[this.layer].formB = player[this.layer].formB - 1
+                }
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        24: {
+            display() {
+                return "<h1><b>+</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formB < tmp.III.maxFormulaValue
+            },
+            onClick(){
+                player[this.layer].formB = player[this.layer].formB + 1
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        25: {
+            display() {
+                return "<h1><b>MAX</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formB < tmp.III.maxFormulaValue
+            },
+            onClick(){
+                player[this.layer].formB = tmp.III.maxFormulaValue
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        31: {
+            display() {
+                return "<h1><b>0</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formC > 0
+            },
+            onClick(){
+                player[this.layer].formC = 0
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        32: {
+            display() {
+                return "<h1><b>HALF</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formC > 0
+            },
+            onClick(){
+                player[this.layer].formC = Math.ceil(player[this.layer].formC / 2)
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        33: {
+            display() {
+                return "<h1><b>-</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formC > 0
+            },
+            onClick(){
+                player[this.layer].formC = player[this.layer].formC - 1
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        34: {
+            display() {
+                return "<h1><b>+</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formC < tmp.III.maxFormulaValue
+            },
+            onClick(){
+                player[this.layer].formC = player[this.layer].formC + 1
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+        35: {
+            display() {
+                return "<h1><b>MAX</b></h1>"
+            },
+            canClick() {
+                return player[this.layer].formC < tmp.III.maxFormulaValue
+            },
+            onClick(){
+                player[this.layer].formC = tmp.III.maxFormulaValue
+            },
+            style: {
+                "width": "50px",
+                "height": "5px"
+            }
+        },
+    },
+
     tabFormat: [
         "blank",
         ["infobox", "lore"],
@@ -422,14 +723,11 @@ addLayer("III", {
             function() { return 'This part is brought to you by Algebraic Progression by randomtuba <br> f(t+1) = f(t) + (bc)^(a/5) <br> NOTE: a, b and c must ALL be 1 or above for f(t) to increment. <br>Current variable cap: ' + tmp.III.maxFormulaValue},
             { "color": "white", "font-size": "16px" }],
         "blank",
-        ["display-text", "a:"],
-        ["slider", () => ['formA', 0, tmp.III.maxFormulaValue]],
+        ["row", [["clickable", 11], "blank", ["clickable", 12], "blank", ["clickable", 13], "blank", ["bar", "a"], "blank", ["clickable", 14], "blank", ["clickable", 15]]],
         "blank",
-        ["display-text", "b:"],
-        ["slider", () => ['formB', 0, tmp.III.maxFormulaValue]],
+        ["row", [["clickable", 21], "blank", ["clickable", 22], "blank", ["clickable", 23], "blank", ["bar", "b"], "blank",["clickable", 24], "blank", ["clickable", 25]]],
         "blank",
-        ["display-text", "c:"],
-        ["slider", () => ['formC', 0, tmp.III.maxFormulaValue]],
+        ["row", [["clickable", 31], "blank", ["clickable", 32], "blank", ["clickable", 33], "blank", ["bar", "c"], "blank", ["clickable", 34], "blank", ["clickable", 35]]],
         "blank",
         ["display-text",
             function() { return 'Your current f(t) = ' + format(player.III.formpts) + "<br>f(t) gain per sec: " + format(new Decimal.pow(new Decimal(player[this.layer].formB).times(player[this.layer].formC), new Decimal(player[this.layer].formA).div(new Decimal (5))))},

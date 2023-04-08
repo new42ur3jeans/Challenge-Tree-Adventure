@@ -18,19 +18,27 @@ let VERSION = {
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br>
+    <h3>v1.2: Only a little better than v1.1, but still more than a hotfix</h3><br>
+		- Multiple Measures Prevents b from being 0 in 'As Medium As Division' (because division by 0 error). <br>
+		- Reverted formula variable visualization back to bars due to mobile users' requests.<br>
+		- Added more buttons around the variable bars for better QoL.<br>
+		- The Changelog is more pleasing in the eyes.<br>
+	<br>
     <h3>v1.1.2: Hotfix?</h3><br>
         - changed the line displaying at the top of the page because the NaN bug is dead lol.<br>
+	<br>
 	<h3>v1.1.1: Hotfix</h3><br>
 		- Put back a forgotten line break on one of the challenges.<br>
 		- Corrected the Author's Discord username.<br>
-
+	<br>
     <h3>v1.1: IMPROVEMENT</h3><br>
 		- DEFEATED THE NAN BUG<br>
 		- Formatted the challenge goals of Tier 2.<br>
 		- Kind of added some balance to Tier 3?<br>
 		- Milestones of each layer are moved to the bottom of the tab.<br>
 		- Tier 3 now uses sliders, no more clicking too many times!<br>
-
+	<br>
 	<h3>v1.0</h3><br>
 		- Started Production.`
 
