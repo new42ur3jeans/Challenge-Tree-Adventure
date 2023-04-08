@@ -13,11 +13,14 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.1",
-	name: "The Much Better Beginning?",
+	num: "1.2.1",
+	name: "Preparation for v2",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+    <br>
+	<h3>v1.2.1: I should really be more careful</h3><br>
+		- forgot to change version number on the top right hand corner lol, fixed that
 	<br>
     <h3>v1.2: Only a little better than v1.1, but still more than a hotfix</h3><br>
 		- Multiple Measures Prevents b from being 0 in 'As Medium As Division' (because division by 0 error). <br>
