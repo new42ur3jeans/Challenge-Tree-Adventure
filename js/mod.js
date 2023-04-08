@@ -5,7 +5,7 @@ let modInfo = {
 	pointsName: "Challenge Power",
 	modFiles: ["layers.js", "tree.js"],
 
-	discordName: "Ecolofied_42UR3#4052",
+	discordName: "42UR3ified_Ecolo#4052",
 	discordLink: "https://discord.gg/ACfnuRpVSC",
 	initialStartPoints: new Decimal (0), // Used for hard resets and new players
 	offlineLimit: 0,  // In hours
@@ -18,6 +18,10 @@ let VERSION = {
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.1.1: Hotfix</h3><br>
+		- Put back a forgotten line break on one of the challenges.<br>
+		- Corrected the Author's Discord username.<br>
+
     <h3>v1.1: IMPROVEMENT</h3><br>
 		- DEFEATED THE NAN BUG<br>
 		- Formatted the challenge goals of Tier 2.<br>

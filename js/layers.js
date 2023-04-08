@@ -384,7 +384,7 @@ addLayer("III", {
         14: {
             name: "The Awaited Quadratic Reference",
             completionLimit: 100,
-            challengeDescription: function() {return "Resets f(t) value, and f(t) only increases when (b<sup>2</sup>-4ac)>=0."+challengeCompletions(this.layer, this.id)
+            challengeDescription: function() {return "Resets f(t) value, and f(t) only increases when (b<sup>2</sup>-4ac)>=0. <br>"+challengeCompletions(this.layer, this.id)
             + "/" + this.completionLimit + " completions"},
             canComplete: function() {return player[this.layer].formpts.gte(new Decimal.pow(1000, challengeCompletions("III", 14) + 1)) },//always does 1 at a time, check if points > req},
             goalDescription: function() {return "f(t) >= " +  format(new Decimal.pow(1000, challengeCompletions("III", 14) + 1))},
