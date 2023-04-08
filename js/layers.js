@@ -508,7 +508,7 @@ addLayer("III", {
                 player[this.layer].formA = Math.ceil(player[this.layer].formA / 2)
             },
             style: {
-                "width": "50px",
+                "width": "70px",
                 "height": "5px"
             }
         },
@@ -583,7 +583,7 @@ addLayer("III", {
                 player[this.layer].formB = Math.ceil(player[this.layer].formB / 2)
             },
             style: {
-                "width": "50px",
+                "width": "70px",
                 "height": "5px"
             }
         },
@@ -662,7 +662,7 @@ addLayer("III", {
                 player[this.layer].formC = Math.ceil(player[this.layer].formC / 2)
             },
             style: {
-                "width": "50px",
+                "width": "70px",
                 "height": "5px"
             }
         },

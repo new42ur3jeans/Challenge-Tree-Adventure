@@ -13,14 +13,17 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.2.1",
+	num: "1.2.2",
 	name: "Preparation for v2",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.2.2: A little visual improvement, I guess</h3><br>
+		- Added a forgotten line break in the change log. <br>
+		- The second clickable is now wide enough to contain the word 'HALF'.<br>
     <br>
 	<h3>v1.2.1: I should really be more careful</h3><br>
-		- forgot to change version number on the top right hand corner lol, fixed that
+		- forgot to change version number on the top right hand corner lol, fixed that <br>
 	<br>
     <h3>v1.2: Only a little better than v1.1, but still more than a hotfix</h3><br>
 		- Multiple Measures Prevents b from being 0 in 'As Medium As Division' (because division by 0 error). <br>
