@@ -13,11 +13,18 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.0",
-	name: "The Beginning",
+	num: "1.1",
+	name: "The Much Better Beginning?",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+    <h3>v1.1: IMPROVEMENT</h3><br>
+		- DEFEATED THE NAN BUG<br>
+		- Formatted the challenge goals of Tier 2.<br>
+		- Kind of added some balance to Tier 3?<br>
+		- Milestones of each layer are moved to the bottom of the tab.<br>
+		- Tier 3 now uses sliders, no more clicking too many times!<br>
+
 	<h3>v1.0</h3><br>
 		- Started Production.`
 
@@ -61,7 +68,7 @@ function getPointGen() {
 		gain = gain.pow(0.500 - challengeCompletions("II", 15) * 0.004)	
 		gain = gain.times(new Decimal.pow(0.001, challengeCompletions("II", 15) + 1))
 	}
-	gain = gain.times(new Decimal.pow(2,challengeCompletions("III",11))).times(player.III.formpts.add(1))	
+	gain = gain.times(new Decimal.pow(2,challengeCompletions("III",11))).times(new Decimal(player.III.formpts).add(1))	
 	return gain
 	
 }

@@ -24,7 +24,7 @@ addLayer("I", {
     softcap: function() {
         capstart = new Decimal (100)
         capstart = capstart.times(new Decimal.pow(10, challengeCompletions("II",11)))
-        capstart = capstart.times(new Decimal.pow(2,challengeCompletions("III",12))).times(player.III.formpts.add(1))
+        capstart = capstart.times(new Decimal.pow(2,challengeCompletions("III",12))).times(new Decimal(player.III.formpts).add(1))
         return capstart
     },
     softcapPower: function() {return new Decimal (0.25)},
@@ -106,6 +106,16 @@ addLayer("I", {
             done() { return player.I.points.gte(20) }
         }
     },
+    tabFormat: [
+        "blank",
+        ["infobox", "lore"],
+        "main-display",
+        "prestige-button",
+        "blank",
+        "challenges",
+        "blank",
+        "milestones",
+    ],
     doReset(I) {
         if(layers[I].row <= layers[this.layer].row || layers[I].row == "side")return;
         let keep = []
@@ -139,14 +149,14 @@ addLayer("II", {
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         mult = mult.plus(new Decimal.pow(challengeCompletions("II", 12),2))
-        mult = mult.plus(new Decimal.pow(2,challengeCompletions("III",13)).sub(1)).times(player.III.formpts.add(1))
+        mult = mult.plus(new Decimal.pow(2,challengeCompletions("III",13)).sub(1)).times(new Decimal(player.III.formpts).add(1))
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
     },
     passiveGeneration() {
-        return player.III.points.times(0.01).times(new Decimal.pow(2,challengeCompletions("III",14))).times(player.III.formpts.plus(1))
+        return new Decimal(new Decimal(player.III.points).times(0.01).times(new Decimal.pow(2,challengeCompletions("III",14))).times(new Decimal(player.III.formpts).plus(1)))
     },
     row: 1, // Row the layer is in on the tree (0 is the first row)
     branches: ["I"],
@@ -177,7 +187,7 @@ addLayer("II", {
             challengeDescription: function() {return "No nerfs, just finish the challenge! (Hint: make use of Tier 1 Power)<br>"+challengeCompletions(this.layer, this.id)
             + "/" + this.completionLimit + " completions"},
             canComplete: function() {return player.points.gte(new Decimal.pow(1000, challengeCompletions("II", 11) + 1)) },//always does 1 at a time, check if points > req},
-            goalDescription: function() {return new Decimal.pow(1000, challengeCompletions("II", 11) + 1)+" Challenge Power"},
+            goalDescription: function() {return format(new Decimal.pow(1000, challengeCompletions("II", 11) + 1))+" Challenge Power"},
             rewardDescription: function() {return "Softcap to tier 1 power gain is delayed by " + format(new Decimal.pow(10, challengeCompletions("II",11))) +"x."},
             unlocked() {return hasMilestone(this.layer,1)}
         },
@@ -187,7 +197,7 @@ addLayer("II", {
             challengeDescription: function() {return "Reward of 'The Second One's Not So Free' is disabled.<br>"+challengeCompletions(this.layer, this.id)
             + "/" + this.completionLimit + " completions"},
             canComplete: function() {return player.points.gte(new Decimal.pow(1000, challengeCompletions("II", 12) + 1)) },//always does 1 at a time, check if points > req},
-            goalDescription: function() {return new Decimal.pow(1000, challengeCompletions("II", 12) + 1)+" Challenge Power"},
+            goalDescription: function() {return format(new Decimal.pow(1000, challengeCompletions("II", 12) + 1))+" Challenge Power"},
             rewardDescription: function() {return "x" + format(new Decimal.pow(challengeCompletions("II", 12),2).plus(1)) +" to Tier 2 Power gain."},
             unlocked() {return hasMilestone(this.layer,2)}
         },
@@ -197,7 +207,7 @@ addLayer("II", {
             challengeDescription: function() {return "'The first exercise', and production is raised by ^" + format(0.500 - challengeCompletions("II", 13) * 0.004) + "<br>" +challengeCompletions(this.layer, this.id)
             + "/" + this.completionLimit + " completions"},
             canComplete: function() {return player.points.gte(new Decimal.pow(1000, challengeCompletions("II", 13) + 2)) },//always does 1 at a time, check if points > req},
-            goalDescription: function() {return new Decimal.pow(1000, challengeCompletions("II", 13) + 2)+" Challenge Power"},
+            goalDescription: function() {return format(new Decimal.pow(1000, challengeCompletions("II", 13) + 2))+" Challenge Power"},
             rewardDescription: function() {return "Gain " + format(new Decimal.pow(10, challengeCompletions("II", 13) - 1)) +"% of Tier 1 power per second."},
             unlocked() {return hasMilestone(this.layer,3)}
         },
@@ -207,7 +217,7 @@ addLayer("II", {
             challengeDescription: function() {return "'The first exercise', and production is divided by " + format(new Decimal.pow(1000, challengeCompletions("II", 14) + 1)) + "<br>" +challengeCompletions(this.layer, this.id)
             + "/" + this.completionLimit + " completions"},
             canComplete: function() {return player.points.gte(new Decimal.pow(1000, challengeCompletions("II", 14) + 1)) },//always does 1 at a time, check if points > req},
-            goalDescription: function() {return new Decimal.pow(1000, challengeCompletions("II", 14) + 1)+" Challenge Power"},
+            goalDescription: function() {return format(new Decimal.pow(1000, challengeCompletions("II", 14) + 1))+" Challenge Power"},
             rewardDescription: function() {return "Tier 2 power is boosted by " + format(new Decimal.pow(10, challengeCompletions("II", 14))) +"x."},
             unlocked() {return hasMilestone(this.layer,4)}
         },
@@ -217,7 +227,7 @@ addLayer("II", {
             challengeDescription: function() {return "You are stuck in T1C3-4 AND T2C2-4. (difficulty for Tier 2 challenges you are stuck in is based on this challenge's completions)<br>Complete this challenge 5 times for something cool..." + "<br>" +challengeCompletions(this.layer, this.id)
             + "/" + this.completionLimit + " completions"},
             canComplete: function() {return player.points.gte(new Decimal.pow(1000, challengeCompletions("II", 15) + 1)) },//always does 1 at a time, check if points > req},
-            goalDescription: function() {return new Decimal.pow(1000, challengeCompletions("II", 15) + 1)+" Challenge Power"},
+            goalDescription: function() {return format(new Decimal.pow(1000, challengeCompletions("II", 15) + 1))+" Challenge Power"},
             rewardDescription: function() {return "Multiply  'The Second One's Not So Free''s effect by " + format(new Decimal.pow(challengeCompletions("II", 15), 2).plus(1)) +"x."},
             unlocked() {return hasMilestone(this.layer,5)}
         },
@@ -250,6 +260,16 @@ addLayer("II", {
         },
         
     },
+    tabFormat: [
+        "blank",
+        ["infobox", "lore"],
+        "main-display",
+        "prestige-button",
+        "blank",
+        "challenges",
+        "blank",
+        "milestones",
+    ],
     doReset(II) {
         if(layers[II].row <= layers[this.layer].row || layers[II].row == "side")return;
         layerDataReset("II", ["challenges","milestones"]);
@@ -265,9 +285,9 @@ addLayer("III", {
         unlocked: false,
 		points: new Decimal(0),
         formpts: new Decimal(0),
-        formA: new Decimal(0),
-        formB: new Decimal(0),
-        formC: new Decimal(0),
+        formA: 0,
+        formB: 0,
+        formC: 0,
     }},
     color: "#0099FF",
     requires: new Decimal.pow(10, 30), // Can be a function that takes requirement increases into account
@@ -276,7 +296,7 @@ addLayer("III", {
     baseAmount() {return player.II.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 2, // Prestige currency exponent
-    effectDescription: function() {return "which increases the caps of your equation's variables by " + format(player.III.points) + " and gives " + format(player.III.points) + "% of tier 2 power on prestige per sec."},
+    effectDescription: function() {return "which increases the caps of your equation's variables by " + format(player.III.points) + " (hardcapped at 500) and gives " + format(player.III.points) + "% of tier 2 power on prestige per sec."},
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -286,20 +306,23 @@ addLayer("III", {
     },
     update(diff) {
         let gain = new Decimal(0)
-        if (player[this.layer].formA.gte(1)&&player[this.layer].formB.gte(1)&&player[this.layer].formC.gte(1)) {
-            gain = new Decimal.pow(player[this.layer].formB.times(player[this.layer].formC), player[this.layer].formA.div(new Decimal (5))) // put how much you gain per second here
+        if (player[this.layer].formA >= 1 && player[this.layer].formB >= 1 &&player[this.layer].formC >= 1) {
+            gain = new Decimal.pow(new Decimal(player[this.layer].formB).times(player[this.layer].formC), new Decimal(player[this.layer].formA).div(new Decimal (5))) // put how much you gain per second here
         }
-        if (inChallenge("III",12)&&((player[this.layer].formA.sub(player[this.layer].formB).sub(player[this.layer].formC)).lt(0))) {
+        if (inChallenge("III",12)&&((new Decimal(player[this.layer].formA).sub(player[this.layer].formB).sub(player[this.layer].formC)).lt(0))) {
             gain = new Decimal(0)
         }
-        if (inChallenge("III",13)&&((player[this.layer].formA.div(player[this.layer].formB).sub(player[this.layer].formC)).lt(0))) {
+        if (inChallenge("III",13)&&((new Decimal(player[this.layer].formA).div(player[this.layer].formB).sub(player[this.layer].formC)).lt(0))) {
             gain = new Decimal(0)
         }
-        if (inChallenge("III",14)&&((new Decimal.pow(player[this.layer].formB,2).sub(player[this.layer].formA.times(player[this.layer].formC).times(4)).lt(0)))) {
+        if (inChallenge("III",14)&&((new Decimal.pow(player[this.layer].formB,2).sub(new Decimal(player[this.layer].formA).times(player[this.layer].formC).times(4)).lt(0)))) {
             gain = new Decimal(0)
         }
         player[this.layer].formpts = player[this.layer].formpts.add(gain.times(diff));
       },
+    maxFormulaValue() {
+        return [11, 12, 13, 14].map(id => challengeCompletions('III', id)).reduce((a,b) => a+b, player.III.points.min(500).toNumber());
+    },
     row: 2, // Row the layer is in on the tree (0 is the first row)
     branches: ["II"],
     hotkeys: [
@@ -323,163 +346,7 @@ addLayer("III", {
             Form: <q>Don't worry, I won't make this boring! Come on, let me show you the kind of challenges I do!</q><br>`,
         },
     },
-    bars: {
-        a: {
-            direction: RIGHT,
-            width: 300,
-            height: 50,
-            progress() {
-                return player[this.layer].formA.div(player[this.layer].points.add(new Decimal(challengeCompletions("III", 11) + challengeCompletions("III", 12) + challengeCompletions("III", 13) + challengeCompletions("III", 14))))
-            },
-            display() {
-                return "a: " +  format(player[this.layer].formA) + "/" + format(player[this.layer].points.add(new Decimal(challengeCompletions("III", 11) + challengeCompletions("III", 12) + challengeCompletions("III", 13) + challengeCompletions("III", 14))));
-            },
-            baseStyle: {
-                "background-color": "#777777"
-            },
-            fillStyle: {
-                "background-color": "#FF0000"
-            },
-            textStyle: {
-                "color": "#000000"
-            }
-        },
-        b: {
-            direction: RIGHT,
-            width: 300,
-            height: 50,
-            progress() {
-                return player[this.layer].formB.div(player[this.layer].points.add(new Decimal(new Decimal(challengeCompletions("III", 11) + challengeCompletions("III", 12) + challengeCompletions("III", 13) + challengeCompletions("III", 14)))))
-            },
-            display() {
-                return "b: " + format(player[this.layer].formB) + "/" + format(player[this.layer].points.add(new Decimal(new Decimal(challengeCompletions("III", 11) + challengeCompletions("III", 12) + challengeCompletions("III", 13) + challengeCompletions("III", 14)))))
-            },
-            baseStyle: {
-                "background-color": "#777777"
-            },
-            fillStyle: {
-                "background-color": "#00FF00"
-            },
-            textStyle: {
-                "color": "#000000"
-            }
-        },
-        c: {
-            direction: RIGHT,
-            width: 300,
-            height: 50,
-            progress() {
-                return player[this.layer].formC.div(player[this.layer].points.add(new Decimal(new Decimal(challengeCompletions("III", 11) + challengeCompletions("III", 12) + challengeCompletions("III", 13) + challengeCompletions("III", 14)))))
-            },
-            display() {
-                return "c: " + format(player[this.layer].formC) + "/" + format(player[this.layer].points.add(new Decimal(challengeCompletions("III", 11) + challengeCompletions("III", 12) + challengeCompletions("III", 13) + challengeCompletions("III", 14))))
-            },
-            baseStyle: {
-                "background-color": "#777777"
-            },
-            fillStyle: {
-                "background-color": "#00FFFF"
-            },
-            textStyle: {
-                "color": "#000000"
-            }
-        }
-    },
 
-    clickables: {
-        rows: 3,
-        cols: 2,
-        11: {
-            display() {
-                return "<h1><b>-</b></h1>"
-            },
-            canClick() {
-                return player[this.layer].formA.gt(new Decimal (0))
-            },
-            onClick(){
-                player[this.layer].formA = player[this.layer].formA.sub(1)
-            },
-            style: {
-                "width": "50px",
-                "height": "25px"
-            }
-        },
-        12: {
-            display() {
-                return "<h1><b>+</b></h1>"
-            },
-            canClick() {
-                return player[this.layer].formA.lt(player[this.layer].points.add(new Decimal(challengeCompletions("III", 11) + challengeCompletions("III", 12) + challengeCompletions("III", 13) + challengeCompletions("III", 14))))
-            },
-            onClick(){
-                player[this.layer].formA = player[this.layer].formA.add(1)
-            },
-            style: {
-                "width": "50px",
-                "height": "25px"
-            }
-        },
-        21: {
-            display() {
-                return "<h1><b>-</b></h1>"
-            },
-            canClick() {
-                return player[this.layer].formB.gt(new Decimal (0))
-            },
-            onClick(){
-                player[this.layer].formB = player[this.layer].formB.sub(1)
-            },
-            style: {
-                "width": "50px",
-                "height": "25px"
-            }
-        },
-        22: {
-            display() {
-                return "<h1><b>+</b></h1>"
-            },
-            canClick() {
-                return player[this.layer].formB.lt(player[this.layer].points.add(new Decimal(challengeCompletions("III", 11) + challengeCompletions("III", 12) + + challengeCompletions("III", 13) + challengeCompletions("III", 14))))
-            },
-            onClick(){
-                player[this.layer].formB = player[this.layer].formB.add(1)
-            },
-            style: {
-                "width": "50px",
-                "height": "25px"
-            }
-        },
-        31: {
-            display() {
-                return "<h1><b>-</b></h1>"
-            },
-            canClick() {
-                return player[this.layer].formC.gt(new Decimal (0))
-            },
-            onClick(){
-                player[this.layer].formC = player[this.layer].formC.sub(1)
-            },
-            style: {
-                "width": "50px",
-                "height": "25px"
-            }
-        },
-        32: {
-            display() {
-                return "<h1><b>+</b></h1>"
-            },
-            canClick() {
-                return player[this.layer].formC.lt(player[this.layer].points.add(new Decimal(challengeCompletions("III", 11) + challengeCompletions("III", 12) + challengeCompletions("III", 13) + challengeCompletions("III", 14))))
-            },
-            onClick(){
-                player[this.layer].formC = player[this.layer].formC.add(1)
-            },
-            style: {
-                "width": "50px",
-                "height": "25px"
-            }
-        },
-    },
     challenges: {
         11: {
             name: "The first one is the easiest again",
@@ -517,7 +384,7 @@ addLayer("III", {
         14: {
             name: "The Awaited Quadratic Reference",
             completionLimit: 100,
-            challengeDescription: function() {return "Resets f(t) value, and f(t) only increases when (b^-4ac)>=0. <br>Is it just me or is this easier than the last 2 challenges?<br>"+challengeCompletions(this.layer, this.id)
+            challengeDescription: function() {return "Resets f(t) value, and f(t) only increases when (b<sup>2</sup>-4ac)>=0."+challengeCompletions(this.layer, this.id)
             + "/" + this.completionLimit + " completions"},
             canComplete: function() {return player[this.layer].formpts.gte(new Decimal.pow(1000, challengeCompletions("III", 14) + 1)) },//always does 1 at a time, check if points > req},
             goalDescription: function() {return "f(t) >= " +  format(new Decimal.pow(1000, challengeCompletions("III", 14) + 1))},
@@ -552,36 +419,39 @@ addLayer("III", {
         "prestige-button",
         "blank",
         ["display-text",
-            function() { return 'This part is brought to you by Algebraic Progression by randomtuba <br> f(t+1) = f(t) + (bc)^(a/5) <br> NOTE: a, b and c must ALL be 1 or above for f(t) to increment.' },
+            function() { return 'This part is brought to you by Algebraic Progression by randomtuba <br> f(t+1) = f(t) + (bc)^(a/5) <br> NOTE: a, b and c must ALL be 1 or above for f(t) to increment. <br>Current variable cap: ' + tmp.III.maxFormulaValue},
             { "color": "white", "font-size": "16px" }],
         "blank",
-        ["row", [["clickable", 11], "blank", ["bar", "a"], "blank", ["clickable", 12]]],
+        ["display-text", "a:"],
+        ["slider", () => ['formA', 0, tmp.III.maxFormulaValue]],
         "blank",
-        ["row", [["clickable", 21], "blank", ["bar", "b"], "blank", ["clickable", 22]]],
+        ["display-text", "b:"],
+        ["slider", () => ['formB', 0, tmp.III.maxFormulaValue]],
         "blank",
-        ["row", [["clickable", 31], "blank", ["bar", "c"], "blank", ["clickable", 32]]],
+        ["display-text", "c:"],
+        ["slider", () => ['formC', 0, tmp.III.maxFormulaValue]],
         "blank",
         ["display-text",
-            function() { return 'Your current f(t) = ' + format(player.III.formpts) + "<br>f(t) gain per sec: " + format(new Decimal.pow(player[this.layer].formB.times(player[this.layer].formC), player[this.layer].formA.div(new Decimal (5))))},
+            function() { return 'Your current f(t) = ' + format(player.III.formpts) + "<br>f(t) gain per sec: " + format(new Decimal.pow(new Decimal(player[this.layer].formB).times(player[this.layer].formC), new Decimal(player[this.layer].formA).div(new Decimal (5))))},
             { "color": "white", "font-size": "16px" }],
         "blank",
         ["display-text",
         function() { 
         if(inChallenge("III",12)) {
-            return "The challenge's formula sums to " + format(player[this.layer].formA.sub(player[this.layer].formB).sub(player[this.layer].formC))
+            return "The challenge's formula sums to " + format(new Decimal(player[this.layer].formA).sub(player[this.layer].formB).sub(player[this.layer].formC))
         }
         if(inChallenge("III",13)) {
-            return "The challenge's formula sums to " + format(player[this.layer].formA.div(player[this.layer].formB).sub(player[this.layer].formC))
+            return "The challenge's formula sums to " + format(new Decimal(player[this.layer].formA).div(player[this.layer].formB).sub(player[this.layer].formC))
         }
         if(inChallenge("III",14)) {
-            return "The challenge's formula sums to " + format(new Decimal.pow(player[this.layer].formB,2).sub(player[this.layer].formA.times(player[this.layer].formC).times(4)))
+            return "The challenge's formula sums to " + format(new Decimal.pow(player[this.layer].formB,2).sub(new Decimal(player[this.layer].formA).times(player[this.layer].formC).times(4)))
         }
         },
         { "color": "white", "font-size": "16px" }],
         "blank",
-        "milestones",
-        "blank",
         "challenges",
+        "blank",
+        "milestones",
     ],
     layerShown(){return challengeCompletions("II",15) >= 5}
 })
