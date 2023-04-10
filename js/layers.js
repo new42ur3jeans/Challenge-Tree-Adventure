@@ -23,14 +23,16 @@ addLayer("I", {
     },
     softcap: function() {
         capstart = new Decimal (100)
-        capstart = capstart.times(new Decimal.pow(10, challengeCompletions("II",11)))
+        if (!inChallenge("IV",22)) {
+            capstart = capstart.times(new Decimal.pow(10, challengeCompletions("II",11)))
+        }
         capstart = capstart.times(new Decimal.pow(2,challengeCompletions("III",12))).times(new Decimal(player.III.formpts).add(1))
         return capstart
     },
     softcapPower: function() {return new Decimal (0.25)},
     effectDescription: function() {return "also note that tier 1 power gain is softcapped by ^0.25 after " + new Decimal.pow(10, challengeCompletions("II",11)).times(100).times(new Decimal.pow(2,challengeCompletions("III",12))).times(player.III.formpts.add(1)) + " tier 1 power."},
     passiveGeneration() {
-        if (!hasChallenge("II",13))
+        if (!hasChallenge("II",13)||inChallenge("IV",22))
             return new Decimal(0)
         return new Decimal.pow(10, challengeCompletions("II", 13) - 1).times(0.01)
     },
@@ -142,13 +144,17 @@ addLayer("II", {
     exponent: 0.5, // Prestige currency exponent
     effect() {
         cpmult = new Decimal (0.5)
-        cpmult = cpmult.plus(new Decimal.pow(10, challengeCompletions("II", 14)))
+        if(!inChallenge("IV",22)){
+            cpmult = cpmult.plus(new Decimal.pow(10, challengeCompletions("II", 14)))
+        }
         return cpmult
     },
     effectDescription: function() {return "which boosts Challenge Power Gain by " + player.II.points.times(this.effect()).plus(1) + "x"},
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
-        mult = mult.plus(new Decimal.pow(challengeCompletions("II", 12),2))
+        if (!inChallenge("IV",22)){ 
+            mult = mult.plus(new Decimal.pow(challengeCompletions("II", 12),2))
+        }
         mult = mult.plus(new Decimal.pow(2,challengeCompletions("III",13)).sub(1)).times(new Decimal(player.III.formpts).add(1))
         return mult
     },
@@ -280,7 +286,7 @@ addLayer("II", {
 addLayer("III", {
     name: "Tier 3", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "III", // This appears on the layer's node. Default is the id with the first letter capitalized
-    position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: false,
 		points: new Decimal(0),
@@ -306,6 +312,7 @@ addLayer("III", {
     },
     update(diff) {
         let gain = new Decimal(0)
+        let nerfBal = new Decimal(10)
         if (player[this.layer].formA >= 1 && player[this.layer].formB >= 1 &&player[this.layer].formC >= 1) {
             gain = new Decimal.pow(new Decimal(player[this.layer].formB).times(player[this.layer].formC), new Decimal(player[this.layer].formA).div(new Decimal (5))) // put how much you gain per second here
         }
@@ -316,6 +323,27 @@ addLayer("III", {
             gain = new Decimal(0)
         }
         if (inChallenge("III",14)&&((new Decimal.pow(player[this.layer].formB,2).sub(new Decimal(player[this.layer].formA).times(player[this.layer].formC).times(4)).lt(0)))) {
+            gain = new Decimal(0)
+        }
+        if (challengeCompletions("IV","POS") >= 1){
+            gain = gain.times(player.IV.posPoints.plus(1))
+        }
+        if (hasChallenge("IV",12)) {
+            nerfBal = nerfBal.times(new Decimal.pow(10,30)) //negative nerf
+        }
+        if (hasChallenge("IV",22)) {
+            nerfBal = nerfBal.times(new Decimal.pow(10,50))
+        }
+        if (challengeCompletions("IV","NEG") >= 1){
+            gain = gain.times(new Decimal.div(1, new Decimal(1).plus(player.IV.negPoints.div(nerfBal))))
+        }   
+        if (hasChallenge("IV",11)) {
+            gain = gain.times(new Decimal.pow(10,30)) //positive buff
+        }
+        if (hasChallenge("IV",21)) {
+            gain = gain.times(new Decimal.pow(10,50))
+        }
+        if (inChallenge("IV",11)) {
             gain = new Decimal(0)
         }
         player[this.layer].formpts = player[this.layer].formpts.add(gain.times(diff));
@@ -730,7 +758,7 @@ addLayer("III", {
         ["row", [["clickable", 31], "blank", ["clickable", 32], "blank", ["clickable", 33], "blank", ["bar", "c"], "blank", ["clickable", 34], "blank", ["clickable", 35]]],
         "blank",
         ["display-text",
-            function() { return 'Your current f(t) = ' + format(player.III.formpts) + "<br>f(t) gain per sec: " + format(new Decimal.pow(new Decimal(player[this.layer].formB).times(player[this.layer].formC), new Decimal(player[this.layer].formA).div(new Decimal (5))))},
+            function() { return 'Your current f(t) = ' + format(player.III.formpts) + "<br>Base f(t) gain per sec: " + format(new Decimal.pow(new Decimal(player[this.layer].formB).times(player[this.layer].formC), new Decimal(player[this.layer].formA).div(new Decimal (5))))},
             { "color": "white", "font-size": "16px" }],
         "blank",
         ["display-text",
@@ -752,4 +780,259 @@ addLayer("III", {
         "milestones",
     ],
     layerShown(){return challengeCompletions("II",15) >= 5}
+})
+addLayer("IV", {
+    name: "Tier 4", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "IV", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+        posPoints: new Decimal(0),
+        negPoints: new Decimal(0),
+    }},
+    color: "#FFC0CB",
+    requires: new Decimal.pow(10,1000), // Can be a function that takes requirement increases into account
+    resource: "tier 4 power", // Name of prestige currency
+    baseResource: "tier 2 power", // Name of resource prestige is based on
+    baseAmount() {return player.II.points}, // Get the current amount of baseResource
+    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 0.1, // Prestige currency exponent
+
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        nerfBal = new Decimal (10)
+        if (challengeCompletions("IV","NEG") >= 1){
+            mult = mult.times(player.IV.negPoints.plus(1))
+        }
+        if (hasChallenge("IV", 12)){
+            nerfBal = nerfBal.times(new Decimal.pow(10,30)) //positive nerf
+        }
+        if (hasChallenge("IV", 21)){
+            nerfBal = nerfBal.times(new Decimal.pow(10,50)) //positive nerf
+        }
+        if (challengeCompletions("IV","POS") >= 1){
+            mult = mult.times(new Decimal.div(1, new Decimal(1).plus(player.IV.posPoints.div(nerfBal))))
+        } 
+        if (hasChallenge("IV", 11)){
+            mult = mult.times(new Decimal.pow(10,30)) // negative buff
+        }
+        if (hasChallenge("IV", 22)){
+            mult = mult.times(new Decimal.pow(10,50)) // negative buff
+        }
+        if (inChallenge("IV", 11)){
+            mult = mult.div(new Decimal.pow(10,20))
+        }
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+    passiveGeneration() {
+        if (hasMilestone("IV", 1)) {
+            return new Decimal(1)
+        } else {
+            return new Decimal(0)
+        }
+    },
+    update(diff) {
+        let posGain = new Decimal (0)
+        let negGain = new Decimal (0)
+        if (challengeCompletions("IV", "POS") >= 1) {
+            posGain = new Decimal.pow(3, challengeCompletions("IV", "POS"))
+        }
+        if (challengeCompletions("IV", "NEG") >= 1) {
+            negGain = new Decimal.pow(3, challengeCompletions("IV", "NEG"))
+        }
+        player[this.layer].posPoints = player[this.layer].posPoints.add(posGain.times(diff)).min(tmp.IV.buyables[11].effect);
+        player[this.layer].negPoints = player[this.layer].negPoints.add(negGain.times(diff)).min(tmp.IV.buyables[11].effect);
+      },
+    row: 2, // Row the layer is in on the tree (0 is the first row)
+    branches: ["II"],
+    hotkeys: [
+        {key: "4", description: "4: Reset for Tier 4 Power", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    infoboxes: {
+        lore: {
+            title: "Tier 4 Lore",
+            body: `Form:<q>It's fun being able to do this with you. Come back here if you wanna make the solution of your formula much bigger!</q><br>
+            ...<br>
+            You:<q>Why are we going back to the gym?</q><br>
+            Chal:<qNot back to the gym, exactly... we are taking a detour to a merchant's!</q><br>
+            You:<q>A merchant's? Are we finally able to buy upgrades?</q><br>
+            Chal:<q>On the contrary, the stuff this merchant sells won't help you much with incrementing your Challenge Power. She owns a balance though, so she has a few challenges based on balancing and dilemma!</q><br>
+            ...<br>
+            <img src="SceneIV.png" width="500"><br>
+            Horn:<q>Hello, both of you. What brings you to this shop of mine?</q><br>
+            Chal:<q>I heard you have some challenges, would you mind giving this feller next to mine some?</q><br>
+            Horn:<q>Normally I would charge people 100 cookies for that, but you have bought a lot of my stuff before, so I can give them to you free of charge.</q><br>
+            Chal:<q>Amazing! Let's do this!</q><br>
+            Horn:<q>Just don't disturb my business, OK?</q>`,
+        },
+    },
+    buyables: {
+        showRespec: true,
+        respec() {
+            for (const id of [11, 12, 21, 22]) {
+              player.IV.challenges[id] = 0;
+            }
+            setBuyableAmount(this.layer, 11,  Decimal.dZero);
+          },
+        respecText: "Respec Limit Break",
+        11: {
+            title: "Limit Break",
+            display() { return "Multiple the caps of positive points and negative points by 100 and unlocks " + new Decimal(Math.floor(getBuyableAmount(this.layer, this.id)/3)).min(5) + " challenges (unlocks every 3 purchases, this effect caps at 5). <br>Both of them needs to reach their cap to use this buyable. <br>Current: " + getBuyableAmount(this.layer, this.id) },
+            canAfford() { return (player[this.layer].posPoints.equals(tmp.IV.buyables[11].effect)) && (player[this.layer].negPoints.equals(tmp.IV.buyables[11].effect)) },
+            effect() { let metCap = new Decimal(100)
+            metCap = metCap.times(new Decimal.pow(100, new Decimal(getBuyableAmount(this.layer, this.id)).add(1)))
+            return metCap 
+            },
+            buy() {
+                player[this.layer].posPoints = new Decimal(0)
+                player[this.layer].negPoints = new Decimal(0)
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+        },
+    },
+    bars: {
+        "POS": {
+            direction: UP,
+            width: 50,
+            height: 300,
+            progress() {
+                return new Decimal(player[this.layer].posPoints).div(tmp.IV.buyables[11].effect)
+            },
+            display() {
+                return  format(new Decimal(player[this.layer].posPoints).div(tmp.IV.buyables[11].effect).times(100)) + "%" ;
+            },
+            baseStyle: {
+                "background-color": "#777777"
+            },
+            fillStyle: {
+                "background-color": "#FFFF00"
+            },
+            textStyle: {
+                "color": "#000000"
+            }
+        },
+        "NEG": {
+            direction: UP,
+            width: 50,
+            height: 300,
+            progress() {
+                return new Decimal(player[this.layer].negPoints).div(tmp.IV.buyables[11].effect)
+            },
+            display() {
+                return format(new Decimal(player[this.layer].negPoints).div(tmp.IV.buyables[11].effect).times(100)) + "%" ;
+            },
+            baseStyle: {
+                "background-color": "#777777"
+            },
+            fillStyle: {
+                "background-color": "#00FFFF"
+            },
+            textStyle: {
+                "color": "#000000"
+            }
+        },
+    },
+    challenges: {
+        "POS": {
+            name: "Positive",
+            completionLimit: 100,
+            challengeDescription: function() {return "Complete this challenge to start gaining Positive Points. <br>"+challengeCompletions(this.layer, this.id)
+            + "/" + this.completionLimit + " completions"},
+            canComplete: function() {return player[this.layer].points.gte(new Decimal.pow(10000, challengeCompletions("IV", "POS") + 1)) },//always does 1 at a time, check if points > req},
+            goalDescription: function() {return format(new Decimal.pow(10000, challengeCompletions("IV", "POS") + 1))+" Tier 4 Power"},
+            rewardDescription: function() {return format(new Decimal.pow(3, challengeCompletions("IV", "POS"))) +" Positive Points per second."},
+            unlocked() {return true}
+        },
+        "NEG": {
+            name: "Negative",
+            completionLimit: 100,
+            challengeDescription: function() {return "Complete this challenge to start gaining Negative Points. <br>"+challengeCompletions(this.layer, this.id)
+            + "/" + this.completionLimit + " completions"},
+            canComplete: function() {return player[this.layer].points.gte(new Decimal.pow(10000, challengeCompletions("IV", "NEG") + 1)) },//always does 1 at a time, check if points > req},
+            goalDescription: function() {return format(new Decimal.pow(10000, challengeCompletions("IV", "NEG") + 1))+" Tier 4 Power"},
+            rewardDescription: function() {return format(new Decimal.pow(3, challengeCompletions("IV", "NEG"))) +" Negative Points per second."},
+            unlocked() {return true}
+        },
+        11:{
+            name: "Buff Boost",
+            challengeDescription: "You can't gain f(t). ",
+            canComplete: function() {return player.II.points.gte(new Decimal.pow(10, 240)) },//always does 1 at a time, check if points > req},
+            goalDescription: function() {return "1e240 Tier 2 Power"},
+            rewardDescription: function() {return "Both Buffs are boosted by 1e30x."},
+            onEnter(){ 
+                player.IV.points = new Decimal (0)
+                player.III.formpts = new Decimal (0)
+            },            
+            unlocked() {return (new Decimal(getBuyableAmount(this.layer, 11)).gte(3)) && !hasChallenge(this.layer,12)}
+        },
+        12:{
+            name: "Nerf Decrease",
+            challengeDescription: "Tier 4 Power gain is divided by 1e20.",
+            canComplete: function() {return player[this.layer].points.gte(new Decimal.pow(10, 60)) },//always does 1 at a time, check if points > req},
+            goalDescription: function() {return format(new Decimal.pow(10, 60))+" Tier 4 Power"},
+            rewardDescription: function() {return "Both nerfs are divided by 1e30x."},
+            onEnter(){ 
+                player.IV.points = new Decimal (0)
+            },     
+            unlocked() {return (new Decimal(getBuyableAmount(this.layer, 11)).gte(3))&& !hasChallenge(this.layer,11)}
+        },
+        21:{
+            name: "Starlight",
+            challengeDescription: "All rewards of Tier 1 challenges (except You Gotta Start Somewhere for obvious reasons) are disabled. ",
+            canComplete: function() {return player[this.layer].points.gte(new Decimal.pow(10, 60)) },//always does 1 at a time, check if points > req},
+            goalDescription: function() {return format(new Decimal.pow(10, 60))+" Tier 4 Power"},
+            rewardDescription: function() {return "Boost Positive buff and weaken its nerf, both by 1e50x."},
+            onEnter(){ 
+                player.IV.points = new Decimal (0)
+            },     
+            unlocked() {return (new Decimal(getBuyableAmount(this.layer, 11)).gte(6)) && !hasChallenge(this.layer,22)}
+        },
+        22:{
+            name: "Black Hole",
+            challengeDescription: "All rewards of Tier 2 challenges are disabled.",
+            canComplete: function() {return player[this.layer].points.gte(new Decimal.pow(10, 60)) },//always does 1 at a time, check if points > req},
+            goalDescription: function() {return format(new Decimal.pow(10, 60))+" Tier 4 Power"},
+            rewardDescription: function() {return "Boost Negative buff and weaken its nerf, both by 1e50x."},
+            onEnter(){ 
+                player.IV.points = new Decimal (0)
+            }, 
+            unlocked() {return (new Decimal(getBuyableAmount(this.layer, 11)).gte(6))&& !hasChallenge(this.layer,21)}
+        },
+    },
+    milestones: {
+        1: {
+            requirementDescription: "Unlock this layer",
+            effectDescription: "Gain all of your pending tier 4 power per second.",
+            done() { return player.IV.points.gte(1) }
+        },
+    },
+    tabFormat: [
+        "blank",
+        ["infobox", "lore"],
+        "main-display",
+        "prestige-button",
+        "blank",
+        ["row", [["bar","POS"], ["challenge", "POS"], ["challenge", "NEG"],  ["bar","NEG"]]],
+        "blank",
+        ["display-text",
+            function() { return 'You have ' + format(player.IV.posPoints) + "/" + format(tmp.IV.buyables[11].effect) + " Positive Points, which boosts f(t) gain by " + format(player.IV.posPoints) + " (base) but nerfs Tier 4 power gain by " + format(new Decimal.div(player.IV.posPoints,10)) + " (base)."},
+            { "color": "white", "font-size": "16px" }],
+        "blank",
+        ["display-text",
+        function() { return 'You have ' + format(player.IV.negPoints) + "/" + format(tmp.IV.buyables[11].effect) + " Negative Points, which boosts Tier 4 power gain by " + format(player.IV.negPoints) + " (base) but nerfs f(t) gain by " + format(new Decimal.div(player.IV.negPoints,10)) + " (base)."},
+        { "color": "white", "font-size": "16px" }],
+        "blank",
+        "buyables",
+        "blank",
+        ["row", [["challenge", 11], ["challenge", 12]]],
+        "blank",
+        ["row", [["challenge", 21], ["challenge", 22]]],
+        "blank",
+        "milestones",
+    ],
+    layerShown(){return challengeCompletions("III",14) >= 10}
 })

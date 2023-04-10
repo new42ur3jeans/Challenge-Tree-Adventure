@@ -8,16 +8,21 @@ let modInfo = {
 	discordName: "42UR3ified_Ecolo#4052",
 	discordLink: "https://discord.gg/ACfnuRpVSC",
 	initialStartPoints: new Decimal (0), // Used for hard resets and new players
-	offlineLimit: 0,  // In hours
+	offlineLimit: 1,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.2.2",
-	name: "Preparation for v2",
+	num: "2.0",
+	name: "Balance and Dilemma",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br>
+	<h3>v2: Balance and Dilemma</h3><br>
+	- TIER FOUR HYPEEEEEEEEE <br>
+	- Added 2 Dilemma challenges to Tier 4 (5 planned).<br>
+	<br>
 	<h3>v1.2.2: A little visual improvement, I guess</h3><br>
 		- Added a forgotten line break in the change log. <br>
 		- The second clickable is now wide enough to contain the word 'HALF'.<br>
@@ -69,13 +74,13 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
-	if(hasChallenge("I",12)&&!inChallenge("II",12)&&!inChallenge("II",13)&&!inChallenge("II",14)&&!inChallenge("II",15))
-	    gain = gain.times(player.I.points.times(0.1).plus(1)).times(new Decimal.pow(1000, challengeCompletions("II", 15)).plus(1))	
+	if(hasChallenge("I",12)&&!inChallenge("II",12)&&!inChallenge("II",13)&&!inChallenge("II",14)&&!inChallenge("II",15)&&!inChallenge("IV",21))
+	    gain = gain.times(player.I.points.times(0.1).plus(1))	
 	if(inChallenge("I", 13)||inChallenge("II",15))
 		gain = gain.times(0.1)
-	if(hasChallenge("I",13))
+	if(hasChallenge("I",13)&&!inChallenge("IV",21))
 		gain = gain.times(10)
-	if(hasChallenge("I",14))
+	if(hasChallenge("I",14)&&!inChallenge("IV",21))
 		gain = gain.pow(2)
 	if(inChallenge("I",14)||inChallenge("II",15))
 		gain = gain.pow(1/2)
@@ -88,6 +93,9 @@ function getPointGen() {
 		gain = gain.pow(0.500 - challengeCompletions("II", 15) * 0.004)	
 		gain = gain.times(new Decimal.pow(0.001, challengeCompletions("II", 15) + 1))
 	}
+	if(!inChallenge("IV",22)) {
+		gain = gain.times(new Decimal.pow(1000, challengeCompletions("II", 15)).plus(1))
+	}
 	gain = gain.times(new Decimal.pow(2,challengeCompletions("III",11))).times(new Decimal(player.III.formpts).add(1))	
 	return gain
 	
@@ -99,12 +107,12 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Nope, no real endgame here!"
+	"Endgame: 9 Limit Breaks"
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("e280000000"))
+	return getBuyableAmount("IV", 11).gte(9)
 }
 
 
