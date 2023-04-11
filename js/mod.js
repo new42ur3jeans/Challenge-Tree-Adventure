@@ -13,11 +13,15 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.0",
+	num: "2.1",
 	name: "Balance and Dilemma",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br>
+	<h3>v2: Balance Matters</h3><br>
+	- Positive and Negative Point Nerfs are now exponented to ^0.5 so their reward would not be stuck at x10 without Dilemma Challenges.<br>
+	- Effect of Positive and Negative Points now update based on Dilemma Challenge Effects.<br>
 	<br>
 	<h3>v2: Balance and Dilemma</h3><br>
 	- TIER FOUR HYPEEEEEEEEE <br>

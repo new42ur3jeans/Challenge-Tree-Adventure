@@ -312,7 +312,6 @@ addLayer("III", {
     },
     update(diff) {
         let gain = new Decimal(0)
-        let nerfBal = new Decimal(10)
         if (player[this.layer].formA >= 1 && player[this.layer].formB >= 1 &&player[this.layer].formC >= 1) {
             gain = new Decimal.pow(new Decimal(player[this.layer].formB).times(player[this.layer].formC), new Decimal(player[this.layer].formA).div(new Decimal (5))) // put how much you gain per second here
         }
@@ -326,26 +325,11 @@ addLayer("III", {
             gain = new Decimal(0)
         }
         if (challengeCompletions("IV","POS") >= 1){
-            gain = gain.times(player.IV.posPoints.plus(1))
-        }
-        if (hasChallenge("IV",12)) {
-            nerfBal = nerfBal.times(new Decimal.pow(10,30)) //negative nerf
-        }
-        if (hasChallenge("IV",22)) {
-            nerfBal = nerfBal.times(new Decimal.pow(10,50))
+            gain = gain.times(tmp.IV.posBuff.plus(1))
         }
         if (challengeCompletions("IV","NEG") >= 1){
-            gain = gain.times(new Decimal.div(1, new Decimal(1).plus(player.IV.negPoints.div(nerfBal))))
+            gain = gain.div(tmp.IV.negNerf.plus(1))
         }   
-        if (hasChallenge("IV",11)) {
-            gain = gain.times(new Decimal.pow(10,30)) //positive buff
-        }
-        if (hasChallenge("IV",21)) {
-            gain = gain.times(new Decimal.pow(10,50))
-        }
-        if (inChallenge("IV",11)) {
-            gain = new Decimal(0)
-        }
         player[this.layer].formpts = player[this.layer].formpts.add(gain.times(diff));
       },
     maxFormulaValue() {
@@ -801,28 +785,12 @@ addLayer("IV", {
 
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
-        nerfBal = new Decimal (10)
         if (challengeCompletions("IV","NEG") >= 1){
-            mult = mult.times(player.IV.negPoints.plus(1))
-        }
-        if (hasChallenge("IV", 12)){
-            nerfBal = nerfBal.times(new Decimal.pow(10,30)) //positive nerf
-        }
-        if (hasChallenge("IV", 21)){
-            nerfBal = nerfBal.times(new Decimal.pow(10,50)) //positive nerf
+            mult = mult.times(tmp.IV.negBuff.plus(1))
         }
         if (challengeCompletions("IV","POS") >= 1){
-            mult = mult.times(new Decimal.div(1, new Decimal(1).plus(player.IV.posPoints.div(nerfBal))))
+            mult = mult.div(tmp.IV.posNerf.plus(1))
         } 
-        if (hasChallenge("IV", 11)){
-            mult = mult.times(new Decimal.pow(10,30)) // negative buff
-        }
-        if (hasChallenge("IV", 22)){
-            mult = mult.times(new Decimal.pow(10,50)) // negative buff
-        }
-        if (inChallenge("IV", 11)){
-            mult = mult.div(new Decimal.pow(10,20))
-        }
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -847,6 +815,48 @@ addLayer("IV", {
         player[this.layer].posPoints = player[this.layer].posPoints.add(posGain.times(diff)).min(tmp.IV.buyables[11].effect);
         player[this.layer].negPoints = player[this.layer].negPoints.add(negGain.times(diff)).min(tmp.IV.buyables[11].effect);
       },
+    posBuff() {
+        let buff = new Decimal(player[this.layer].posPoints)
+        if (hasChallenge("IV",11)){
+            buff = buff.times(new Decimal.pow(10,30))
+        }
+        if (hasChallenge("IV",21)){
+            buff = buff.times(new Decimal.pow(10,50))
+        }
+        return buff
+    },
+    negBuff() {
+        let buff = new Decimal(player[this.layer].negPoints)
+        if (hasChallenge("IV",11)){
+            buff = buff.times(new Decimal.pow(10,30))
+        }
+        if (hasChallenge("IV",22)){
+            buff = buff.times(new Decimal.pow(10,50))
+        }
+        return buff
+    },
+    posNerf() {
+        let nerf = new Decimal(player[this.layer].posPoints)
+        if (hasChallenge("IV",12)){
+            nerf = nerf.div(new Decimal.pow(10,30))
+        }
+        if (hasChallenge("IV",21)){
+            nerf = nerf.div(new Decimal.pow(10,50))
+        }
+        nerf = (nerf.div(10)).pow(0.5)
+        return nerf
+    },
+    negNerf() {
+        let nerf = new Decimal(player[this.layer].negPoints)
+        if (hasChallenge("IV",12)){
+            nerf = nerf.div(new Decimal.pow(10,30))
+        }
+        if (hasChallenge("IV",22)){
+            nerf = nerf.div(new Decimal.pow(10,50))
+        }
+        nerf = (nerf.div(10)).pow(0.5)
+        return nerf
+    },
     row: 2, // Row the layer is in on the tree (0 is the first row)
     branches: ["II"],
     hotkeys: [
@@ -879,6 +889,7 @@ addLayer("IV", {
             setBuyableAmount(this.layer, 11,  Decimal.dZero);
           },
         respecText: "Respec Limit Break",
+        respecMessage: "Unlike other Prestige Tree Mods that does a layer reset, Respeccing Limit Break only resets Dilemma Challenge Completions besides of buyable amount. If you felt stuck with your current challenges' rewards, respec away!",
         11: {
             title: "Limit Break",
             display() { return "Multiple the caps of positive points and negative points by 100 and unlocks " + new Decimal(Math.floor(getBuyableAmount(this.layer, this.id)/3)).min(5) + " challenges (unlocks every 3 purchases, this effect caps at 5). <br>Both of them needs to reach their cap to use this buyable. <br>Current: " + getBuyableAmount(this.layer, this.id) },
@@ -1019,11 +1030,11 @@ addLayer("IV", {
         ["row", [["bar","POS"], ["challenge", "POS"], ["challenge", "NEG"],  ["bar","NEG"]]],
         "blank",
         ["display-text",
-            function() { return 'You have ' + format(player.IV.posPoints) + "/" + format(tmp.IV.buyables[11].effect) + " Positive Points, which boosts f(t) gain by " + format(player.IV.posPoints) + " (base) but nerfs Tier 4 power gain by " + format(new Decimal.div(player.IV.posPoints,10)) + " (base)."},
+            function() { return 'You have ' + format(player.IV.posPoints) + "/" + format(tmp.IV.buyables[11].effect) + " Positive Points, which boosts f(t) gain by " + format(tmp.IV.posBuff) + " but nerfs Tier 4 power gain by " + format(tmp.IV.posNerf) + "."},
             { "color": "white", "font-size": "16px" }],
         "blank",
         ["display-text",
-        function() { return 'You have ' + format(player.IV.negPoints) + "/" + format(tmp.IV.buyables[11].effect) + " Negative Points, which boosts Tier 4 power gain by " + format(player.IV.negPoints) + " (base) but nerfs f(t) gain by " + format(new Decimal.div(player.IV.negPoints,10)) + " (base)."},
+        function() { return 'You have ' + format(player.IV.negPoints) + "/" + format(tmp.IV.buyables[11].effect) + " Negative Points, which boosts Tier 4 power gain by " + format(tmp.IV.negBuff) + "  but nerfs f(t) gain by " + format(tmp.IV.negNerf) + "."},
         { "color": "white", "font-size": "16px" }],
         "blank",
         "buyables",
