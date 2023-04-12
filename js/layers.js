@@ -164,6 +164,15 @@ addLayer("II", {
     passiveGeneration() {
         return new Decimal(new Decimal(player.III.points).times(0.01).times(new Decimal.pow(2,challengeCompletions("III",14))).times(new Decimal(player.III.formpts).plus(1)))
     },
+    update(diff) {
+        const activeChallenge = player[this.layer].activeChallenge;
+        if (activeChallenge && canCompleteChallenge(this.layer, activeChallenge)) {
+          startChallenge(this.layer, activeChallenge);
+          if (!maxedChallenge(this.layer, activeChallenge)) {
+            startChallenge(this.layer, activeChallenge);
+          }
+        }
+    },
     row: 1, // Row the layer is in on the tree (0 is the first row)
     branches: ["I"],
     hotkeys: [
@@ -183,7 +192,19 @@ addLayer("II", {
             You: <q>...the first thing I think of when hearing the word 'dimensions' is this incremental game called Antimatter Dimensions...</q><br>
             Rep: <q>...Antimatter Dimensions? We don't have this game here! Now I believe you are from another world. My name's Rep. Been building my body ever since I got to utilize Challenge Power.</q><br>
             You: <q>Lemme guess. You have challenges that I can do to gain challenge power too, am I right?</q><br>
-            Rep: <q>Unlike Chal's challenges, mine are repeatable. Think of it as lifting dumbbells! Exercising with these challenges should give you lots of Challenge Power.</q>`,
+            Rep: <q>Unlike Chal's challenges, mine are repeatable. Think of it as lifting dumbbells! Exercising with these challenges should give you lots of Challenge Power.</q><br>
+            Chal: <q>Woah there. I would prefer my friend's experience here to be more fun, working out sounds boring. How about I cast a spell to make them automatically motivated and complete another workout just as they finish doing one in the same set?</q><br>
+            Rep: <q>People still gain strength with that spell, so fine.</q><br>
+            (Chal gave you the power of autoCompleting repeatable challenges.)`,
+        },
+    },
+    clickables: {
+        11: {
+            title: "Hold to gain tier 1 power",
+            display: "(Mobile QoL)",
+            onClick() {if(canReset("I")) doReset("I")},
+            onHold() {if(canReset("I")) doReset("I")},
+            canClick() {return true},
         },
     },
     challenges: {
@@ -270,7 +291,7 @@ addLayer("II", {
         "blank",
         ["infobox", "lore"],
         "main-display",
-        "prestige-button",
+        ["row", ["prestige-button", ["clickable", 11]]],
         "blank",
         "challenges",
         "blank",
@@ -329,12 +350,20 @@ addLayer("III", {
         }
         if (challengeCompletions("IV","NEG") >= 1){
             gain = gain.div(tmp.IV.negNerf.plus(1))
-        }   
-        player[this.layer].formpts = player[this.layer].formpts.add(gain.times(diff));
+        }
+        player[this.layer].formpts = player[this.layer].formpts.add(gain.times(diff));   
+        const activeChallenge = player[this.layer].activeChallenge;
+        if (activeChallenge && canCompleteChallenge(this.layer, activeChallenge)) {
+          startChallenge(this.layer, activeChallenge);
+          if (!maxedChallenge(this.layer, activeChallenge)) {
+            startChallenge(this.layer, activeChallenge);
+          }
+        }
       },
     maxFormulaValue() {
         return [11, 12, 13, 14].map(id => challengeCompletions('III', id)).reduce((a,b) => a+b, player.III.points.min(500).toNumber());
     },
+
     row: 2, // Row the layer is in on the tree (0 is the first row)
     branches: ["II"],
     hotkeys: [
@@ -814,6 +843,13 @@ addLayer("IV", {
         }
         player[this.layer].posPoints = player[this.layer].posPoints.add(posGain.times(diff)).min(tmp.IV.buyables[11].effect);
         player[this.layer].negPoints = player[this.layer].negPoints.add(negGain.times(diff)).min(tmp.IV.buyables[11].effect);
+        const activeChallenge = player[this.layer].activeChallenge;
+        if (activeChallenge && canCompleteChallenge(this.layer, activeChallenge)) {
+          startChallenge(this.layer, activeChallenge);
+          if (!maxedChallenge(this.layer, activeChallenge)) {
+            startChallenge(this.layer, activeChallenge);
+          }
+        }
       },
     posBuff() {
         let buff = new Decimal(player[this.layer].posPoints)
@@ -1030,11 +1066,11 @@ addLayer("IV", {
         ["row", [["bar","POS"], ["challenge", "POS"], ["challenge", "NEG"],  ["bar","NEG"]]],
         "blank",
         ["display-text",
-            function() { return 'You have ' + format(player.IV.posPoints) + "/" + format(tmp.IV.buyables[11].effect) + " Positive Points, which boosts f(t) gain by " + format(tmp.IV.posBuff) + " but nerfs Tier 4 power gain by " + format(tmp.IV.posNerf) + "."},
+            function() { return 'You have ' + format(player.IV.posPoints) + "/" + format(tmp.IV.buyables[11].effect) + " Positive Points, which boosts f(t) gain by " + format(tmp.IV.posBuff) + " but nerfs Tier 4 power gain by " + format(tmp.IV.posNerf, true) + "."},
             { "color": "white", "font-size": "16px" }],
         "blank",
         ["display-text",
-        function() { return 'You have ' + format(player.IV.negPoints) + "/" + format(tmp.IV.buyables[11].effect) + " Negative Points, which boosts Tier 4 power gain by " + format(tmp.IV.negBuff) + "  but nerfs f(t) gain by " + format(tmp.IV.negNerf) + "."},
+        function() { return 'You have ' + format(player.IV.negPoints) + "/" + format(tmp.IV.buyables[11].effect) + " Negative Points, which boosts Tier 4 power gain by " + format(tmp.IV.negBuff) + "  but nerfs f(t) gain by " + format(tmp.IV.negNerf, true) + "."},
         { "color": "white", "font-size": "16px" }],
         "blank",
         "buyables",

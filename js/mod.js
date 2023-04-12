@@ -13,13 +13,17 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.1",
-	name: "Balance and Dilemma",
+	num: "2.(1 1/2)",
+	name: "Fit-tertainment and QoL",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br>
-	<h3>v2: Balance Matters</h3><br>
+	<h3>v2.(1 1/2): Fit-tertainment and QoL</h3><br>
+	- Repeatable Challenges are now autocompleted as long as the player is inside the challenge. <br>
+	- Added a mobile QoL button for mobile players to reset for tier 1 power in layer 2. <br>
+	<br>
+	<h3>v2.1: Balance Matters</h3><br>
 	- Positive and Negative Point Nerfs are now exponented to ^0.5 so their reward would not be stuck at x10 without Dilemma Challenges.<br>
 	- Effect of Positive and Negative Points now update based on Dilemma Challenge Effects.<br>
 	<br>
