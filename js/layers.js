@@ -538,7 +538,7 @@ addLayer("III", {
                 return "<h1><b>1</b></h1>"
             },
             canClick() {
-                return player[this.layer].formA.gt(1)
+                return player[this.layer].formA > 1
             },
             onClick(){
                 player[this.layer].formA = new Decimal (1)
@@ -553,10 +553,10 @@ addLayer("III", {
                 return "<h1><b>HALF</b></h1>"
             },
             canClick() {
-                return player[this.layer].formA.gt(0)
+                return player[this.layer].formA > 0
             },
             onClick(){
-                player[this.layer].formA = Math.ceil(player[this.layer].formA.div(2))
+                player[this.layer].formA = Math.ceil(player[this.layer].formA / 2)
             },
             style: {
                 "width": "70px",
@@ -568,10 +568,10 @@ addLayer("III", {
                 return "<h1><b>-</b></h1>"
             },
             canClick() {
-                return player[this.layer].formA.gt(0)
+                return player[this.layer].formA > 0
             },
             onClick(){
-                player[this.layer].formA = player[this.layer].formA.sub(1)
+                player[this.layer].formA = player[this.layer].formA - 1
             },
             style: {
                 "width": "50px",
@@ -583,10 +583,10 @@ addLayer("III", {
                 return "<h1><b>+</b></h1>"
             },
             canClick() {
-                return player[this.layer].formA.lt(tmp.III.maxFormulaValue)
+                return player[this.layer].formA < tmp.III.maxFormulaValue
             },
             onClick(){
-                player[this.layer].formA = player[this.layer].formA.plus(1)
+                player[this.layer].formA = player[this.layer].formA + 1
             },
             style: {
                 "width": "50px",
@@ -598,7 +598,7 @@ addLayer("III", {
                 return "<h1><b>MAX</b></h1>"
             },
             canClick() {
-                return player[this.layer].formA.lt(tmp.III.maxFormulaValue)
+                return player[this.layer].formA < tmp.III.maxFormulaValue
             },
             onClick(){
                 player[this.layer].formA = tmp.III.maxFormulaValue
@@ -613,10 +613,10 @@ addLayer("III", {
                 return "<h1><b>1</b></h1>"
             },
             canClick() {
-                return (player[this.layer].formB.gt(1))
+                return player[this.layer].formB > 1
             },
             onClick(){
-                player[this.layer].formB = 1
+                player[this.layer].formB = new Decimal (1)
             },
             style: {
                 "width": "50px",
@@ -628,10 +628,10 @@ addLayer("III", {
                 return "<h1><b>HALF</b></h1>"
             },
             canClick() {
-                return player[this.layer].formB.gt(0)
+                return player[this.layer].formB > 0
             },
             onClick(){
-                player[this.layer].formB = Math.ceil(player[this.layer].formB.div(2))
+                player[this.layer].formB = Math.ceil(player[this.layer].formB / 2)
             },
             style: {
                 "width": "70px",
@@ -643,13 +643,13 @@ addLayer("III", {
                 return "<h1><b>-</b></h1>"
             },
             canClick() {
-                return player[this.layer].formB.gt(0)
+                return player[this.layer].formB > 0
             },
             onClick(){
                 if (inChallenge("III",13) &&(player[this.layer].formB == 1)) {
                     player[this.layer].formB = 1
                 } else {
-                    player[this.layer].formB = player[this.layer].formB.sub(1)
+                    player[this.layer].formB = player[this.layer].formB - 1
                 }
             },
             style: {
@@ -662,10 +662,10 @@ addLayer("III", {
                 return "<h1><b>+</b></h1>"
             },
             canClick() {
-                return player[this.layer].formB.lt(tmp.III.maxFormulaValue)
+                return player[this.layer].formB < tmp.III.maxFormulaValue
             },
             onClick(){
-                player[this.layer].formB = player[this.layer].formB.plus(1)
+                player[this.layer].formB = player[this.layer].formB + 1
             },
             style: {
                 "width": "50px",
@@ -677,7 +677,7 @@ addLayer("III", {
                 return "<h1><b>MAX</b></h1>"
             },
             canClick() {
-                return player[this.layer].formB.lt(tmp.III.maxFormulaValue)
+                return player[this.layer].formB < tmp.III.maxFormulaValue
             },
             onClick(){
                 player[this.layer].formB = tmp.III.maxFormulaValue
@@ -692,10 +692,10 @@ addLayer("III", {
                 return "<h1><b>1</b></h1>"
             },
             canClick() {
-                return player[this.layer].formC.gt(1)
+                return player[this.layer].formC > 1
             },
             onClick(){
-                player[this.layer].formC = 1
+                player[this.layer].formC = new Decimal(1)
             },
             style: {
                 "width": "50px",
@@ -707,10 +707,10 @@ addLayer("III", {
                 return "<h1><b>HALF</b></h1>"
             },
             canClick() {
-                return player[this.layer].formC.gt(0)
+                return player[this.layer].formC > 0
             },
             onClick(){
-                player[this.layer].formC = Math.ceil(player[this.layer].formC.div(2))
+                player[this.layer].formC = Math.ceil(player[this.layer].formC / 2)
             },
             style: {
                 "width": "70px",
@@ -722,10 +722,10 @@ addLayer("III", {
                 return "<h1><b>-</b></h1>"
             },
             canClick() {
-                return player[this.layer].formC.gt(0)
+                return player[this.layer].formC > 0
             },
             onClick(){
-                player[this.layer].formC = player[this.layer].formC.sub(1)
+                player[this.layer].formC = player[this.layer].formC - 1
             },
             style: {
                 "width": "50px",
@@ -737,10 +737,10 @@ addLayer("III", {
                 return "<h1><b>+</b></h1>"
             },
             canClick() {
-                return player[this.layer].formC.lt(tmp.III.maxFormulaValue)
+                return player[this.layer].formC < tmp.III.maxFormulaValue
             },
             onClick(){
-                player[this.layer].formC = player[this.layer].formC.plus(1)
+                player[this.layer].formC = player[this.layer].formC + 1
             },
             style: {
                 "width": "50px",
@@ -752,7 +752,7 @@ addLayer("III", {
                 return "<h1><b>MAX</b></h1>"
             },
             canClick() {
-                return player[this.layer].formC.lt(tmp.III.maxFormulaValue)
+                return player[this.layer].formC < tmp.III.maxFormulaValue
             },
             onClick(){
                 player[this.layer].formC = tmp.III.maxFormulaValue

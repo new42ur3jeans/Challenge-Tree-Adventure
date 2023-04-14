@@ -13,11 +13,14 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.2",
-	name: "Not a RobTop reference",
+	num: "2.2.1",
+	name: "Decimals and Numbers",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br>
+	<h3>v2.2.1: Decimals and Numbers</h3><br>
+	- Adjusted some of the mathematical statements in tier 3 because it was reported people stopped getting points when clicking tier 3 buttons. <br>
 	<br>
 	<h3>v2.2: No longer a RobTop reference</h3><br>
 	- Added the remaining 3 Dilemma Challenges to Tier 4. <br>
