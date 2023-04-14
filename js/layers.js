@@ -868,12 +868,12 @@ addLayer("IV", {
             }
         }
         if (hasChallenge("IV", 51)){
-            player[this.layer].posPoints = posGain.times(diff).times(player[this.layer].posPoints.log10()).plus(player[this.layer].posPoints)
+            player[this.layer].posPoints = posGain.times(diff).times((player[this.layer].posPoints.plus(10)).log10()).plus(player[this.layer].posPoints)
         } else {
             player[this.layer].posPoints = player[this.layer].posPoints.add(posGain.times(diff)).min(tmp.IV.buyables[11].effect);
         }
         if (hasChallenge("IV", 52)){
-            player[this.layer].negPoints = negGain.times(diff).times(player[this.layer].negPoints.log10()).plus(player[this.layer].negPoints)
+            player[this.layer].negPoints = negGain.times(diff).times((player[this.layer].negPoints.plus(10)).log10()).plus(player[this.layer].negPoints)
         } else {
             player[this.layer].negPoints = player[this.layer].negPoints.add(negGain.times(diff)).min(tmp.IV.buyables[11].effect);
         }

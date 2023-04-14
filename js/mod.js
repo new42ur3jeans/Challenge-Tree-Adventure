@@ -13,11 +13,14 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.2.1",
-	name: "Decimals and Numbers",
+	num: "2.2.2",
+	name: "TWO HOTFIXES IN A ROW",
 }
 
-let changelog = `<h1>Changelog:</h1><br>
+let changelog = `<h1>Changelog:</h1><br>	
+	<br>
+	<h3>v2.2.2: TWO HOTFIXES IN A ROW</h3><br>
+	- Modified the gain formulae for positive and negative points after 5th dilemma challenge completion to avoid logarithm by 0 NaN.<br>
 	<br>
 	<h3>v2.2.1: Decimals and Numbers</h3><br>
 	- Adjusted some of the mathematical statements in tier 3 because it was reported people stopped getting points when clicking tier 3 buttons. <br>
