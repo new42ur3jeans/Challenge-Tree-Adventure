@@ -13,11 +13,16 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.(1 1/2)",
-	name: "Fit-tertainment and QoL",
+	num: "2.2",
+	name: "Not a RobTop reference",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br>
+	<h3>v2.2: No longer a RobTop reference</h3><br>
+	- Added the remaining 3 Dilemma Challenges to Tier 4. <br>
+	- Fixed an issue where clicking + multiple times on tier 3 when starting at 0 would make the variable add in the manner of strings.<br>
+	- Speaking of Tier 3, the leftmost buttons for Tier 3 are replaced with 1 because any value returning 0 halts production.<br>	
 	<br>
 	<h3>v2.(1 1/2): Fit-tertainment and QoL</h3><br>
 	- Repeatable Challenges are now autocompleted as long as the player is inside the challenge. <br>
@@ -115,12 +120,12 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Endgame: 9 Limit Breaks"
+	"Endgame: Complete either one of the last pair of Dilemma Challenge"
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return getBuyableAmount("IV", 11).gte(9)
+	return (hasChallenge("IV",51)||hasChallenge("IV",52))
 }
 
 
