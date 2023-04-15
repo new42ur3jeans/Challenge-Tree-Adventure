@@ -884,13 +884,13 @@ addLayer("IV", {
         } else {
             player[this.layer].negPoints = player[this.layer].negPoints.add(negGain.times(diff)).min(tmp.IV.buyables[11].effect);
         }
-        //const activeChallenge = player[this.layer].activeChallenge;
-        //if (activeChallenge && canCompleteChallenge(this.layer, activeChallenge)) {
-          //startChallenge(this.layer, activeChallenge);
-          //if (!maxedChallenge(this.layer, activeChallenge)) {
-            //startChallenge(this.layer, activeChallenge);
-          //}
-        //}
+        const activeChallenge = player[this.layer].activeChallenge;
+        if (activeChallenge && canCompleteChallenge(this.layer, activeChallenge)) {
+          startChallenge(this.layer, activeChallenge);
+          if (!maxedChallenge(this.layer, activeChallenge)) {
+            startChallenge(this.layer, activeChallenge);
+          }
+        }
       },
     posBuff() {
         let buff = new Decimal(player[this.layer].posPoints)

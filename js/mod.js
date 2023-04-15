@@ -13,11 +13,14 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.2.3",
-	name: "Can v2.2 be stable now please",
+	num: "2.2.3.1",
+	name: "I'm too careless",
 }
 
 let changelog = `<h1>Changelog:</h1><br>	
+	<br>
+	<h3>v2.2.3.1: I'm too careless </h3><br>
+	- Accidentally forgot to uncomment the part responsible for the autocompletion of tier 4 challenges last release.<br>
 	<br>
 	<h3>v2.2.3: Can v2.2 be stable now please </h3><br>
 	- ACTUALLY Fixed the issue where clicking + on tier 3 occasionally makes the variable add in the manner of strings (hopefully, PLEASE).<br>
