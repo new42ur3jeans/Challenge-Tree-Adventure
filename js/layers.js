@@ -354,6 +354,9 @@ addLayer("III", {
         if (challengeCompletions("IV",32) >= 1){
             gain = gain.times(tmp.IV.negBuff.plus(1))
         }
+        if (inChallenge("IV",11)){
+            gain = new Decimal(0)
+        }
         if (hasChallenge("IV",41)) {
             gain = gain.times(new Decimal.pow(10,500))
         }
@@ -538,7 +541,7 @@ addLayer("III", {
                 return "<h1><b>1</b></h1>"
             },
             canClick() {
-                return player[this.layer].formA > 1
+                return new Decimal(player[this.layer].formA).gt(1)
             },
             onClick(){
                 player[this.layer].formA = new Decimal (1)
@@ -553,10 +556,10 @@ addLayer("III", {
                 return "<h1><b>HALF</b></h1>"
             },
             canClick() {
-                return player[this.layer].formA > 0
+                return new Decimal(player[this.layer].formA).gt(1)
             },
             onClick(){
-                player[this.layer].formA = Math.ceil(player[this.layer].formA / 2)
+                player[this.layer].formA = new Decimal.ceil(new Decimal(player[this.layer].formA).div(2))
             },
             style: {
                 "width": "70px",
@@ -568,10 +571,10 @@ addLayer("III", {
                 return "<h1><b>-</b></h1>"
             },
             canClick() {
-                return player[this.layer].formA > 0
+                return new Decimal(player[this.layer].formA).gt(0)
             },
             onClick(){
-                player[this.layer].formA = player[this.layer].formA - 1
+                player[this.layer].formA = new Decimal(player[this.layer].formA).sub(1)
             },
             style: {
                 "width": "50px",
@@ -583,10 +586,10 @@ addLayer("III", {
                 return "<h1><b>+</b></h1>"
             },
             canClick() {
-                return player[this.layer].formA < tmp.III.maxFormulaValue
+                return new Decimal(player[this.layer].formA).lt(tmp.III.maxFormulaValue)
             },
             onClick(){
-                player[this.layer].formA = player[this.layer].formA + 1
+                player[this.layer].formA = new Decimal(new Decimal(player[this.layer].formA).add(1)).min(new Decimal(tmp.III.maxFormulaValue))
             },
             style: {
                 "width": "50px",
@@ -598,10 +601,10 @@ addLayer("III", {
                 return "<h1><b>MAX</b></h1>"
             },
             canClick() {
-                return player[this.layer].formA < tmp.III.maxFormulaValue
+                return new Decimal(player[this.layer].formA).lt(tmp.III.maxFormulaValue)
             },
             onClick(){
-                player[this.layer].formA = tmp.III.maxFormulaValue
+                player[this.layer].formA = new Decimal(tmp.III.maxFormulaValue)
             },
             style: {
                 "width": "50px",
@@ -613,7 +616,7 @@ addLayer("III", {
                 return "<h1><b>1</b></h1>"
             },
             canClick() {
-                return player[this.layer].formB > 1
+                return new Decimal(player[this.layer].formB).gt(1)
             },
             onClick(){
                 player[this.layer].formB = new Decimal (1)
@@ -628,10 +631,10 @@ addLayer("III", {
                 return "<h1><b>HALF</b></h1>"
             },
             canClick() {
-                return player[this.layer].formB > 0
+                return new Decimal(player[this.layer].formB).gt(1)
             },
             onClick(){
-                player[this.layer].formB = Math.ceil(player[this.layer].formB / 2)
+                player[this.layer].formB = new Decimal.ceil(new Decimal(player[this.layer].formB).div(2))
             },
             style: {
                 "width": "70px",
@@ -643,13 +646,13 @@ addLayer("III", {
                 return "<h1><b>-</b></h1>"
             },
             canClick() {
-                return player[this.layer].formB > 0
+                return new Decimal(player[this.layer].formB).gt(0)
             },
             onClick(){
                 if (inChallenge("III",13) &&(player[this.layer].formB == 1)) {
-                    player[this.layer].formB = 1
+                    player[this.layer].formB = new Decimal(1)
                 } else {
-                    player[this.layer].formB = player[this.layer].formB - 1
+                    player[this.layer].formB = new Decimal(player[this.layer].formB).sub(1)
                 }
             },
             style: {
@@ -662,10 +665,10 @@ addLayer("III", {
                 return "<h1><b>+</b></h1>"
             },
             canClick() {
-                return player[this.layer].formB < tmp.III.maxFormulaValue
+                return new Decimal(player[this.layer].formB).lt(tmp.III.maxFormulaValue)
             },
             onClick(){
-                player[this.layer].formB = player[this.layer].formB + 1
+                player[this.layer].formB = new Decimal(new Decimal(player[this.layer].formB).add(1)).min(new Decimal(tmp.III.maxFormulaValue))
             },
             style: {
                 "width": "50px",
@@ -677,10 +680,10 @@ addLayer("III", {
                 return "<h1><b>MAX</b></h1>"
             },
             canClick() {
-                return player[this.layer].formB < tmp.III.maxFormulaValue
+                return new Decimal(player[this.layer].formB).lt(tmp.III.maxFormulaValue)
             },
             onClick(){
-                player[this.layer].formB = tmp.III.maxFormulaValue
+                player[this.layer].formB = new Decimal(tmp.III.maxFormulaValue)
             },
             style: {
                 "width": "50px",
@@ -692,10 +695,10 @@ addLayer("III", {
                 return "<h1><b>1</b></h1>"
             },
             canClick() {
-                return player[this.layer].formC > 1
+                return new Decimal(player[this.layer].formC).gt(1)
             },
             onClick(){
-                player[this.layer].formC = new Decimal(1)
+                player[this.layer].formC = new Decimal (1)
             },
             style: {
                 "width": "50px",
@@ -707,10 +710,10 @@ addLayer("III", {
                 return "<h1><b>HALF</b></h1>"
             },
             canClick() {
-                return player[this.layer].formC > 0
+                return new Decimal(player[this.layer].formC).gt(1)
             },
             onClick(){
-                player[this.layer].formC = Math.ceil(player[this.layer].formC / 2)
+                player[this.layer].formC = new Decimal.ceil(new Decimal(player[this.layer].formC).div(2))
             },
             style: {
                 "width": "70px",
@@ -722,10 +725,14 @@ addLayer("III", {
                 return "<h1><b>-</b></h1>"
             },
             canClick() {
-                return player[this.layer].formC > 0
+                return new Decimal(player[this.layer].formC).gt(0)
             },
             onClick(){
-                player[this.layer].formC = player[this.layer].formC - 1
+                if (inChallenge("III",13) &&(player[this.layer].formC == 1)) {
+                    player[this.layer].formC = new Decimal(1)
+                } else {
+                    player[this.layer].formC = new Decimal(player[this.layer].formC).sub(1)
+                }
             },
             style: {
                 "width": "50px",
@@ -737,10 +744,10 @@ addLayer("III", {
                 return "<h1><b>+</b></h1>"
             },
             canClick() {
-                return player[this.layer].formC < tmp.III.maxFormulaValue
+                return new Decimal(player[this.layer].formC).lt(tmp.III.maxFormulaValue)
             },
             onClick(){
-                player[this.layer].formC = player[this.layer].formC + 1
+                player[this.layer].formC = new Decimal(new Decimal(player[this.layer].formC).add(1)).min(new Decimal(tmp.III.maxFormulaValue))
             },
             style: {
                 "width": "50px",
@@ -752,10 +759,10 @@ addLayer("III", {
                 return "<h1><b>MAX</b></h1>"
             },
             canClick() {
-                return player[this.layer].formC < tmp.III.maxFormulaValue
+                return new Decimal(player[this.layer].formC).lt(tmp.III.maxFormulaValue)
             },
             onClick(){
-                player[this.layer].formC = tmp.III.maxFormulaValue
+                player[this.layer].formC = new Decimal(tmp.III.maxFormulaValue)
             },
             style: {
                 "width": "50px",
@@ -822,7 +829,7 @@ addLayer("IV", {
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: function() {
         if (inChallenge("IV",41)){
-            return new Decimal (0.05)
+            return new Decimal (0.005)
         }
         if (hasChallenge("IV",42)){
             return new Decimal (0.15)
@@ -877,13 +884,13 @@ addLayer("IV", {
         } else {
             player[this.layer].negPoints = player[this.layer].negPoints.add(negGain.times(diff)).min(tmp.IV.buyables[11].effect);
         }
-        const activeChallenge = player[this.layer].activeChallenge;
-        if (activeChallenge && canCompleteChallenge(this.layer, activeChallenge)) {
-          startChallenge(this.layer, activeChallenge);
-          if (!maxedChallenge(this.layer, activeChallenge)) {
-            startChallenge(this.layer, activeChallenge);
-          }
-        }
+        //const activeChallenge = player[this.layer].activeChallenge;
+        //if (activeChallenge && canCompleteChallenge(this.layer, activeChallenge)) {
+          //startChallenge(this.layer, activeChallenge);
+          //if (!maxedChallenge(this.layer, activeChallenge)) {
+            //startChallenge(this.layer, activeChallenge);
+          //}
+        //}
       },
     posBuff() {
         let buff = new Decimal(player[this.layer].posPoints)
@@ -1047,8 +1054,8 @@ addLayer("IV", {
         11:{
             name: "Buff Boost",
             challengeDescription: "You can't gain f(t). ",
-            canComplete: function() {return player.II.points.gte(new Decimal.pow(10, 240)) },//always does 1 at a time, check if points > req},
-            goalDescription: function() {return "1e240 Tier 2 Power"},
+            canComplete: function() {return player.II.points.gte(new Decimal.pow(10, 230)) },//always does 1 at a time, check if points > req},
+            goalDescription: function() {return "1e230 Tier 2 Power"},
             rewardDescription: function() {return "Both Buffs are boosted by 1e30x."},
             onEnter(){ 
                 player.IV.points = new Decimal (0)
@@ -1081,8 +1088,8 @@ addLayer("IV", {
         22:{
             name: "Black Hole",
             challengeDescription: "All rewards of Tier 2 challenges are disabled.",
-            canComplete: function() {return player[this.layer].points.gte(new Decimal.pow(10, 40)) },//always does 1 at a time, check if points > req},
-            goalDescription: function() {return format(new Decimal.pow(10, 40))+" Tier 4 Power"},
+            canComplete: function() {return player[this.layer].points.gte(new Decimal.pow(10, 60)) },//always does 1 at a time, check if points > req},
+            goalDescription: function() {return format(new Decimal.pow(10, 60))+" Tier 4 Power"},
             rewardDescription: function() {return "Boost Negative buff and weaken its nerf, both by 1e50x."},
             onEnter(){ 
                 player.IV.points = new Decimal (0)
@@ -1114,8 +1121,8 @@ addLayer("IV", {
         41:{
             name: "Math Addict",
             challengeDescription: "Cost Scaling of Tier 4 Power is more harsh.",
-            canComplete: function() {return player[this.layer].points.gte(new Decimal.pow(10, 20)) },//always does 1 at a time, check if points > req},
-            goalDescription: function() {return format(new Decimal.pow(10, 20))+" tier 4 power"},
+            canComplete: function() {return player[this.layer].points.gte(new Decimal.pow(10, 160)) },//always does 1 at a time, check if points > req},
+            goalDescription: function() {return format(new Decimal.pow(10, 160))+" tier 4 power"},
             rewardDescription: function() {return "f(t) gain is boosted by 1e500x."},
             onEnter(){ 
                 player.IV.points = new Decimal (0)
@@ -1125,8 +1132,8 @@ addLayer("IV", {
         42:{
             name: "Strength Hunter",
             challengeDescription: "The cap of a, b and c in Tier 3 are always 5.",
-            canComplete: function() {return player.II.points.gte(new Decimal.pow(10, 300)) },//always does 1 at a time, check if points > req},
-            goalDescription: function() {return format(new Decimal.pow(10, 300))+" tier 2 power"},
+            canComplete: function() {return player.II.points.gte(new Decimal.pow(10, 400)) },//always does 1 at a time, check if points > req},
+            goalDescription: function() {return format(new Decimal.pow(10, 400))+" tier 2 power"},
             rewardDescription: function() {return "Cost Scaling of Tier 4 Power is much more lenient."},
             onEnter(){ 
                 player.III.formpts = new Decimal (0)
@@ -1139,8 +1146,8 @@ addLayer("IV", {
         51:{
             name: "Antidepressant",
             challengeDescription: "Positive Buff is disabled.",
-            canComplete: function() {return player[this.layer].points.gte(new Decimal.pow(10, 200)) },//always does 1 at a time, check if points > req},
-            goalDescription: function() {return format(new Decimal.pow(10, 20))+" tier 4 power"},
+            canComplete: function() {return player[this.layer].points.gte(new Decimal.pow(10, 110)) },//always does 1 at a time, check if points > req},
+            goalDescription: function() {return format(new Decimal.pow(10, 110))+" tier 4 power"},
             rewardDescription: function() {return "Positive points can generate past the cap, and it boosts its own gain."},
             onEnter(){ 
                 player.IV.points = new Decimal (0)
@@ -1150,8 +1157,8 @@ addLayer("IV", {
         52:{
             name: "Hydraulic Press",
             challengeDescription: "Negativity Buff is disabled.",
-            canComplete: function() {return player.II.points.gte(new Decimal.pow(10, 300)) },//always does 1 at a time, check if points > req},
-            goalDescription: function() {return format(new Decimal.pow(10, 300))+" tier 2 power"},
+            canComplete: function() {return player.II.points.gte(new Decimal.pow(10, 1870)) },//always does 1 at a time, check if points > req},
+            goalDescription: function() {return format(new Decimal.pow(10, 1870))+" tier 2 power"},
             rewardDescription: function() {return "Negative points can generate past the cap, and it boosts its own gain."},
             onEnter(){ 
                 player.III.formpts = new Decimal (0)

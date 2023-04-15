@@ -13,11 +13,16 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.2.2",
-	name: "TWO HOTFIXES IN A ROW",
+	num: "2.2.3",
+	name: "Can v2.2 be stable now please",
 }
 
 let changelog = `<h1>Changelog:</h1><br>	
+	<br>
+	<h3>v2.2.3: Can v2.2 be stable now please </h3><br>
+	- ACTUALLY Fixed the issue where clicking + on tier 3 occasionally makes the variable add in the manner of strings (hopefully, PLEASE).<br>
+	- Scaled tier 4 dilemma challenges a BIT better I guess? <br>
+	<br>
 	<br>
 	<h3>v2.2.2: TWO HOTFIXES IN A ROW</h3><br>
 	- Modified the gain formulae for positive and negative points after 5th dilemma challenge completion to avoid logarithm by 0 NaN.<br>
@@ -27,7 +32,7 @@ let changelog = `<h1>Changelog:</h1><br>
 	<br>
 	<h3>v2.2: No longer a RobTop reference</h3><br>
 	- Added the remaining 3 Dilemma Challenges to Tier 4. <br>
-	- Fixed an issue where clicking + multiple times on tier 3 when starting at 0 would make the variable add in the manner of strings.<br>
+	- <strike>Fixed an issue where clicking + multiple times on tier 3 when starting at 0 would make the variable add in the manner of strings.</strike><b>TURNS OUT I DIDN'T WAUGHHHHHH</b><br>
 	- Speaking of Tier 3, the leftmost buttons for Tier 3 are replaced with 1 because any value returning 0 halts production.<br>	
 	<br>
 	<h3>v2.(1 1/2): Fit-tertainment and QoL</h3><br>
