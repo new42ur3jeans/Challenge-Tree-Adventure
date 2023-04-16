@@ -13,17 +13,20 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.2.3.1",
-	name: "I'm too careless",
+	num: "2.2.3.2",
+	name: "FIGHTING A HELL BUG",
 }
 
 let changelog = `<h1>Changelog:</h1><br>	
+	<br>
+	<h3>v2.2.3.2: FIGHTING A HELL BUG </h3><br>
+	- Once again attempted to fix the issue where clicking + on tier 3 occasionally makes the variable add in unintentional ways (hopefully, PLEASE).<br>
 	<br>
 	<h3>v2.2.3.1: I'm too careless </h3><br>
 	- Accidentally forgot to uncomment the part responsible for the autocompletion of tier 4 challenges last release.<br>
 	<br>
 	<h3>v2.2.3: Can v2.2 be stable now please </h3><br>
-	- ACTUALLY Fixed the issue where clicking + on tier 3 occasionally makes the variable add in the manner of strings (hopefully, PLEASE).<br>
+	- <strike>ACTUALLY Fixed the issue where clicking + on tier 3 occasionally makes the variable add in the manner of strings (hopefully, PLEASE).</strike><b>WHY IS IT STILL ALIVE</b><br>
 	- Scaled tier 4 dilemma challenges a BIT better I guess? <br>
 	<br>
 	<br>

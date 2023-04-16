@@ -333,7 +333,7 @@ addLayer("III", {
     },
     update(diff) {
         let gain = new Decimal(0)
-        if (player[this.layer].formA >= 1 && player[this.layer].formB >= 1 &&player[this.layer].formC >= 1) {
+        if (player[this.layer].formA.gte(1) && player[this.layer].formB.gte(1) &&player[this.layer].formC.gte(1)) {
             gain = new Decimal.pow(new Decimal(player[this.layer].formB).times(player[this.layer].formC), new Decimal(player[this.layer].formA).div(new Decimal (5))) // put how much you gain per second here
         }
         if (inChallenge("III",12)&&((new Decimal(player[this.layer].formA).sub(player[this.layer].formB).sub(player[this.layer].formC)).lt(0))) {
@@ -434,7 +434,7 @@ addLayer("III", {
             rewardDescription: function() {return "Adds 1 to the a, b and c limit per completion, AND f(t) multiplies Tier 2 Power gain by " + format((new Decimal.pow(2,challengeCompletions("III",13)).sub(1)).times(player[this.layer].formpts.plus(1))) +"x."},
             onEnter() {
                 player[this.layer].formpts = new Decimal(0)
-                if (player[this.layer].formB == 0){
+                if (player[this.layer].formB.eq(0)){
                     player[this.layer].formB = 1
                 }
             },
@@ -649,7 +649,7 @@ addLayer("III", {
                 return new Decimal(player[this.layer].formB).gt(0)
             },
             onClick(){
-                if (inChallenge("III",13) &&(player[this.layer].formB == 1)) {
+                if (inChallenge("III",13) &&(player[this.layer].formB.eq(1))) {
                     player[this.layer].formB = new Decimal(1)
                 } else {
                     player[this.layer].formB = new Decimal(player[this.layer].formB).sub(1)
@@ -728,11 +728,7 @@ addLayer("III", {
                 return new Decimal(player[this.layer].formC).gt(0)
             },
             onClick(){
-                if (inChallenge("III",13) &&(player[this.layer].formC == 1)) {
-                    player[this.layer].formC = new Decimal(1)
-                } else {
                     player[this.layer].formC = new Decimal(player[this.layer].formC).sub(1)
-                }
             },
             style: {
                 "width": "50px",
