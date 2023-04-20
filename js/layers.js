@@ -1117,8 +1117,8 @@ addLayer("IV", {
         41:{
             name: "Math Addict",
             challengeDescription: "Cost Scaling of Tier 4 Power is more harsh.",
-            canComplete: function() {return player[this.layer].points.gte(new Decimal.pow(10, 160)) },//always does 1 at a time, check if points > req},
-            goalDescription: function() {return format(new Decimal.pow(10, 160))+" tier 4 power"},
+            canComplete: function() {return player[this.layer].points.gte(new Decimal.pow(10, 57)) },//always does 1 at a time, check if points > req},
+            goalDescription: function() {return format(new Decimal.pow(10, 57))+" tier 4 power"},
             rewardDescription: function() {return "f(t) gain is boosted by 1e500x."},
             onEnter(){ 
                 player.IV.points = new Decimal (0)
@@ -1127,7 +1127,7 @@ addLayer("IV", {
         },
         42:{
             name: "Strength Hunter",
-            challengeDescription: "The cap of a, b and c in Tier 3 are always 5.",
+            challengeDescription: "Resets all variables of the formula in Tier 3, and the cap of a, b and c in Tier 3 are always 5.",
             canComplete: function() {return player.II.points.gte(new Decimal.pow(10, 400)) },//always does 1 at a time, check if points > req},
             goalDescription: function() {return format(new Decimal.pow(10, 400))+" tier 2 power"},
             rewardDescription: function() {return "Cost Scaling of Tier 4 Power is much more lenient."},

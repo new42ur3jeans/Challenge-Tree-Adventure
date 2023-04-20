@@ -13,11 +13,15 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.2.3.2",
-	name: "FIGHTING A HELL BUG",
+	num: "2.2.3.3",
+	name: "MATH IS INFINITE",
 }
 
 let changelog = `<h1>Changelog:</h1><br>	
+	<br>
+	<h3>v2.2.3.3: MATH IS INFINITE </h3><br>
+	- Math Addict challenge in Tier 4 is scaled better for players who picked Proton.<br>
+	- Added a reminder of Strength Hunter (Tier 4) resetting a, b and c's values in Tier 3.<br>
 	<br>
 	<h3>v2.2.3.2: FIGHTING A HELL BUG </h3><br>
 	- Once again attempted to fix the issue where clicking + on tier 3 occasionally makes the variable add in unintentional ways (hopefully, PLEASE).<br>
