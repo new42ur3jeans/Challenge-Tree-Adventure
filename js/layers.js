@@ -301,7 +301,7 @@ addLayer("II", {
         if(layers[II].row <= layers[this.layer].row || layers[II].row == "side")return;
         layerDataReset("II", ["challenges","milestones"]);
       },
-    layerShown(){return hasChallenge("I",14)}
+    layerShown(){return hasChallenge("I",14)||player.II.points.gte(1)}
 })
 
 addLayer("III", {
@@ -359,6 +359,9 @@ addLayer("III", {
         }
         if (hasChallenge("IV",41)) {
             gain = gain.times(new Decimal.pow(10,500))
+        }
+        if (new Decimal(player.V.hiTimeReward).eq(new Decimal(2))) {
+            gain = gain.times(new Decimal(player.V.highestTime).plus(1))
         }
         player[this.layer].formpts = player[this.layer].formpts.add(gain.times(diff));   
         const activeChallenge = player[this.layer].activeChallenge;
@@ -805,7 +808,11 @@ addLayer("III", {
         "blank",
         "milestones",
     ],
-    layerShown(){return challengeCompletions("II",15) >= 5}
+    layerShown(){return challengeCompletions("II",15) >= 5},
+    doReset(III) {
+        if(layers[III].row <= layers[this.layer].row || layers[III].row == "side")return;
+        layerDataReset("III", ["challenges","milestones","points","formA","formB","formC"]);
+      },
 })
 addLayer("IV", {
     name: "Tier 4", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -842,6 +849,9 @@ addLayer("IV", {
         } 
         if (challengeCompletions("IV",31) >= 1){
             mult = mult.times(tmp.IV.posBuff.plus(1))
+        }
+        if (new Decimal(player.V.hiTimeReward).eq(new Decimal(3))) {
+            mult = mult.times(player.V.highestTime.plus(1))
         }
         return mult
     },
@@ -947,7 +957,7 @@ addLayer("IV", {
             body: `Form:<q>It's fun being able to do this with you. Come back here if you wanna make the solution of your formula much bigger!</q><br>
             ...<br>
             You:<q>Why are we going back to the gym?</q><br>
-            Chal:<qNot back to the gym, exactly... we are taking a detour to a merchant's!</q><br>
+            Chal:<q>Not back to the gym, exactly... we are taking a detour to a merchant's!</q><br>
             You:<q>A merchant's? Are we finally able to buy upgrades?</q><br>
             Chal:<q>On the contrary, the stuff this merchant sells won't help you much with incrementing your Challenge Power. She owns a balance though, so she has a few challenges based on balancing and dilemma!</q><br>
             ...<br>
@@ -1199,5 +1209,201 @@ addLayer("IV", {
         "blank",        
         "milestones",
     ],
-    layerShown(){return challengeCompletions("III",14) >= 10}
+    layerShown(){return challengeCompletions("III",14) >= 10},
+    doReset(IV) {
+        if(layers[IV].row <= layers[this.layer].row || layers[IV].row == "side")return;
+        layerDataReset("IV", ["challenges","milestones","points","buyables","posPoints","negPoints"]);
+      },
+})
+addLayer("V", {
+    name: "Tier 5", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "V", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+        timePts: new Decimal(0),
+        highestTime: new Decimal(0),
+        hiTimeReward: new Decimal(1),
+        timeGain: new Decimal(0),
+    }},
+    color: "#FF0000",
+    requires: new Decimal.pow(10,285), // Can be a function that takes requirement increases into account
+    resource: "tier 5 power", // Name of prestige currency
+    baseResource: "tier 4 power", // Name of resource prestige is based on
+    baseAmount() {return player.IV.points}, // Get the current amount of baseResource
+    type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 3, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+    update(diff){
+        let gain = player[this.layer].points
+        if (!inChallenge(this.layer,11)&&!inChallenge(this.layer,21)&&!inChallenge(this.layer,22)){
+            gain = new Decimal (0)
+        }
+        if (inChallenge(this.layer,21)){
+            gain = gain.div(new Decimal(challengeCompletions(this.layer,21)).add(1))
+        }
+        if (!inChallenge(this.layer,21)){
+            gain = gain.times(new Decimal(challengeCompletions(this.layer,21)).add(1))
+        }
+        if (inChallenge(this.layer,22)){
+            gain = gain.pow(0.5)
+        }
+        if (!inChallenge(this.layer,22)){
+            gain = gain.times(new Decimal.times(challengeCompletions(this.layer,22),10).add(1))
+        }
+        player[this.layer].timeGain = gain
+        player[this.layer].timePts = player[this.layer].timePts.add(gain.times(diff))
+
+        const activeChallenge = player[this.layer].activeChallenge;
+        if (activeChallenge && canCompleteChallenge(this.layer, activeChallenge)) {
+          startChallenge(this.layer, activeChallenge);
+          if (!maxedChallenge(this.layer, activeChallenge)) {
+            startChallenge(this.layer, activeChallenge);
+          }
+        }
+    },
+    row: 3, // Row the layer is in on the tree (0 is the first row)
+    branches: ["III", "IV"],
+    hotkeys: [
+        {key: "5", description: "5: Reset for tier 5 power", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    infoboxes: {
+        lore: {
+            title: "Tier 5 Lore",
+            body: `Chal: <q>I think that's all the business we needed to do here! Let's head to our final destination!</q><br>
+            You: <q>So I can finally go home after I visit there?</q><br>
+            Chal: <q>Yes, most definitely.</q><br>
+            Horn: <q>WAIT A MINUTE!!! Aren't you going to buy something here today!?</q><br>
+            Chal: <q>... Oh, I almost forgot. I would like...</q><br>
+            <br>
+            <b>After Chal bought all the stuff he needed...</b><br>
+            <img src="SceneV.png" width="500"><br>
+            You:<q>What is this place?</q><br>
+            Chal:<q>This is the Chamber of Time. Only people who are powerful enough can withstand the time energy of the chamber.</q><br>
+            You:<q>...you're sounding like I shouldn't be involved with this chamber.</q><br>
+            Chal:<q>You have all it takes, you can trust me!</q><br>
+            You:<q>Ok...?</q><br>
+            Chal:<q>To go back to your dimension, you need to collect enough time energy that it can break the laws of the dimensions. After that, think of the dimension you belong to, and you can go back!</q><br>
+            You:<q>This sounds incredibly dangerous.</q><br>
+            Chal:<q>This is the only way that some people here travel to other dimensions! Either do that or don't go back home.</q><br>
+            You:<q>...fine...</q><br>
+            Chal:<q>One more thing: Time Energy is very unstable outside of the Chamber of Time. If you give up from collecting Time Energy, they would be gone! But your greatest amount of time energy would give you powers, just at a kinda reduced rate. There are also a few mock chambers that rewards you with time energy production boosts when you get a certain amount of time energy, so be sure to check these as well!</q>`,
+        },
+    },
+    challenges: {
+        11: {
+            name: "THE CHAMBER OF TIME",
+            challengeDescription: "Enter this challenge to gain time energy, which value resets on exit.",
+            canComplete: function() {return false},
+            goalDescription: "Get as many time energy as possible...",
+            rewardDescription: "Check text below the challenge",
+            onEnter(){
+                player[this.layer].timePts = new Decimal(0)
+            },
+            onExit() {
+                if (player[this.layer].timePts.gt(player[this.layer].highestTime)){
+                    player[this.layer].highestTime = new Decimal (player[this.layer].timePts)
+                }
+                player[this.layer].timePts = new Decimal(0)
+                if (player[this.layer].hiTimeReward.eq(new Decimal(3))){
+                    player[this.layer].hiTimeReward = new Decimal(1)
+                } else {
+                    player[this.layer].hiTimeReward = player[this.layer].hiTimeReward.add(1)
+                }
+            }
+        },
+        21: {
+            name: "It's gotta be division",
+            completionLimit: Infinity,
+            challengeDescription: function() {return "You can also gain time energy in here, but time energy production is divided based on this challenge's completions.<br>" + format(challengeCompletions(this.layer , this.id),0) + " completions"},
+            canComplete: function() {return player.V.timePts.gte(new Decimal.pow(5 , new Decimal(challengeCompletions(this.layer,this.id)).add(1)))},
+            goalDescription: function() {return format(new Decimal.pow(5 , new Decimal(challengeCompletions(this.layer,this.id)).add(1))) + " time energy"},
+            rewardDescription: "Boost time energy production by this challenge's completions. (disabled in this challenge)",
+            onEnter(){
+                player[this.layer].timePts = new Decimal(0)
+            },
+            onExit() {
+                if (player[this.layer].timePts.gt(player[this.layer].highestTime)){
+                    player[this.layer].highestTime = new Decimal (player[this.layer].timePts)
+                }
+                player[this.layer].timePts = new Decimal(0)
+            },
+            unlocked() {return hasMilestone(this.layer,1)}
+        },
+        22: {
+            name: "The Return of Square Roots",
+            completionLimit: Infinity,
+            challengeDescription: function() {return "You can also gain time energy in here, but time energy production is square rooted.<br>" + format(challengeCompletions(this.layer , this.id),0) + " completions"},
+            canComplete: function() {return player.V.timePts.gte(new Decimal.pow(5 , new Decimal(challengeCompletions(this.layer,this.id)).add(1)))},
+            goalDescription: function() {return format(new Decimal.pow(5 , new Decimal(challengeCompletions(this.layer,this.id)).add(1))) + " time energy"},
+            rewardDescription: "Boost time energy production by this challenge's completions times 10. (disabled in this challenge)",
+            onEnter(){
+                player[this.layer].timePts = new Decimal(0)
+            },
+            onExit() {
+                if (player[this.layer].timePts.gt(player[this.layer].highestTime)){
+                    player[this.layer].highestTime = new Decimal (player[this.layer].timePts)
+                }
+                player[this.layer].timePts = new Decimal(0)
+            },
+            unlocked() {return hasMilestone(this.layer,2)}
+        },
+    },
+    milestones: {
+        1: {
+            requirementDescription: "100 time energy",
+            effectDescription: "Unlock the first INFINITELY COMPLETABLE CHALLENGE",
+            done() { return player.V.timePts.gte(100) }
+        },
+        2: {
+            requirementDescription: "500 time energy",
+            effectDescription: "Unlock the second INFINITELY COMPLETABLE CHALLENGE",
+            done() { return player.V.timePts.gte(500) }
+        },
+    },
+    tabFormat: [
+        "blank",
+        ["infobox", "lore"],
+        "main-display",
+        "prestige-button",
+        "blank",
+        ["challenge",11],
+        "blank",
+        ["display-text",
+            function() { return 'You have ' + format(player.V.timePts) + " time energy."},
+            { "color": "white", "font-size": "16px" }],
+        "blank",
+        ["display-text",
+        function() { return 'You are gaining ' + format(player.V.timeGain) + " time energy per second (based on Tier 5 Power and other instances mentioned in this layer's tab)."},
+        { "color": "white", "font-size": "16px" }],
+        "blank",
+        ["display-text",
+            function() { return 'Your best time energy is ' + format(player.V.highestTime) + ". Its reward changes every time you exit The Chamber of Time (Challenge Power>f(t)>Tier 4 Power>Challenge Power...)."},
+            { "color": "white", "font-size": "16px" }],
+        "blank",
+        ["display-text",
+        function() { 
+            if (player[this.layer].hiTimeReward.eq(new Decimal(1))) {
+                return 'Your best time energy is currently boosting Challenge Power gain by ' + format(player.V.highestTime) + "."
+            }
+            if (player[this.layer].hiTimeReward.eq(new Decimal(2))) {
+                return 'Your best time energy is currently boosting f(t) gain by ' + format(player.V.highestTime) + "."
+            }
+            if (player[this.layer].hiTimeReward.eq(new Decimal(3))) {
+                return 'Your best time energy is currently boosting Tier 4 Power gain by ' + format(player.V.highestTime) + "."
+            }
+        },
+        { "color": "white", "font-size": "16px" }],
+        "blank",
+        ["row", [["challenge", 21],["challenge", 22]]],
+        "milestones",
+    ],
+    layerShown(){return (hasChallenge("IV",51)||hasChallenge("IV",52)||player.V.points.gte(1))}
 })

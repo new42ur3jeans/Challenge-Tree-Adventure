@@ -13,11 +13,16 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "2.2.3.3",
-	name: "MATH IS INFINITE",
+	num: "3.0",
+	name: "You still have time, hero",
 }
 
-let changelog = `<h1>Changelog:</h1><br>	
+let changelog = `<h1>Changelog:</h1><br>
+	<br>
+	<h3>v3.0: You still have time, hero </h3><br>
+	- Finally fixed tier 4's line where Chal's line does not show up.<br>
+	- Implemented Tier 5, which is themed on Time and Infinite Completions.<br>
+	- Tier 5 has 2 challenges other than the Chamber of Time. More to be added soon and open to suggestions for now.<br>
 	<br>
 	<h3>v2.2.3.3: MATH IS INFINITE </h3><br>
 	- Math Addict challenge in Tier 4 is scaled better for players who picked Proton.<br>
@@ -131,6 +136,9 @@ function getPointGen() {
 		gain = gain.times(new Decimal.pow(1000, challengeCompletions("II", 15)).plus(1))
 	}
 	gain = gain.times(new Decimal.pow(2,challengeCompletions("III",11))).times(new Decimal(player.III.formpts).add(1))	
+	if (new Decimal(player.V.hiTimeReward).eq(new Decimal(1))) {
+		gain = gain.times(player.V.highestTime.plus(1))
+	}
 	return gain
 	
 }
@@ -141,12 +149,12 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Endgame: Complete either one of the last pair of Dilemma Challenge"
+	"Endgame: 2 The Return Of Square Root completions"
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return (hasChallenge("IV",51)||hasChallenge("IV",52))
+	return (new Decimal(challengeCompletions("V",22)).gte(2))
 }
 
 
