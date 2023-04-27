@@ -13,11 +13,16 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "3.0",
-	name: "You still have time, hero",
+	num: "3.1",
+	name: "It's over already...?",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br>
+	<h3>v3.1: It's over already...? </h3><br>
+	- Added 3 challenges to Tier 5.<br>
+	- Added an infinity layer that only allows for prestige so far.<br>
+	- Total challenge completions in Tier 5 boosts best time energy effect.<br>
 	<br>
 	<h3>v3.0: You still have time, hero </h3><br>
 	- Finally fixed tier 4's line where Chal's line does not show up.<br>
@@ -137,7 +142,7 @@ function getPointGen() {
 	}
 	gain = gain.times(new Decimal.pow(2,challengeCompletions("III",11))).times(new Decimal(player.III.formpts).add(1))	
 	if (new Decimal(player.V.hiTimeReward).eq(new Decimal(1))) {
-		gain = gain.times(player.V.highestTime.plus(1))
+		gain = gain.times(player.V.highestTime.times(new Decimal(Object.values(player.V.challenges).reduce((a,b) => a+b)).plus(1)).plus(1))
 	}
 	return gain
 	
@@ -149,12 +154,12 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Endgame: 2 The Return Of Square Root completions"
+	"Endgame: Go Infinity"
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return (new Decimal(challengeCompletions("V",22)).gte(2))
+	return (player.Inf.points.gte(2))
 }
 
 

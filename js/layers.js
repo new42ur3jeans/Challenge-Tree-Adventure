@@ -323,7 +323,7 @@ addLayer("III", {
     baseAmount() {return player.II.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 2, // Prestige currency exponent
-    effectDescription: function() {return "which increases the caps of your equation's variables by " + format(player.III.points) + " (hardcapped at 500) and gives " + format(player.III.points) + "% of tier 2 power on prestige per sec."},
+    effectDescription: function() {return "which increases the caps of your equation's variables by " + format(player.III.points.min(500)) + " (hardcapped at 500) and gives " + format(player.III.points) + "% of tier 2 power on prestige per sec."},
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -361,7 +361,7 @@ addLayer("III", {
             gain = gain.times(new Decimal.pow(10,500))
         }
         if (new Decimal(player.V.hiTimeReward).eq(new Decimal(2))) {
-            gain = gain.times(new Decimal(player.V.highestTime).plus(1))
+            gain = gain.times(new Decimal(player.V.highestTime.times(new Decimal(Object.values(player.V.challenges).reduce((a,b) => a+b)).plus(1))).plus(1))
         }
         player[this.layer].formpts = player[this.layer].formpts.add(gain.times(diff));   
         const activeChallenge = player[this.layer].activeChallenge;
@@ -851,7 +851,7 @@ addLayer("IV", {
             mult = mult.times(tmp.IV.posBuff.plus(1))
         }
         if (new Decimal(player.V.hiTimeReward).eq(new Decimal(3))) {
-            mult = mult.times(player.V.highestTime.plus(1))
+            mult = mult.times(player.V.highestTime.times(new Decimal(Object.values(player.V.challenges).reduce((a,b) => a+b)).plus(1)))
         }
         return mult
     },
@@ -1243,21 +1243,37 @@ addLayer("V", {
     },
     update(diff){
         let gain = player[this.layer].points
-        if (!inChallenge(this.layer,11)&&!inChallenge(this.layer,21)&&!inChallenge(this.layer,22)){
+        if (!inChallenge(this.layer,11)&&!inChallenge(this.layer,21)&&!inChallenge(this.layer,22)&&!inChallenge(this.layer,23)&&!inChallenge(this.layer,24)&&!inChallenge(this.layer,25)){
             gain = new Decimal (0)
         }
         if (inChallenge(this.layer,21)){
             gain = gain.div(new Decimal(challengeCompletions(this.layer,21)).add(1))
         }
-        if (!inChallenge(this.layer,21)){
+        if (!inChallenge(this.layer,21)&&!inChallenge(this.layer,25)){
             gain = gain.times(new Decimal(challengeCompletions(this.layer,21)).add(1))
         }
         if (inChallenge(this.layer,22)){
             gain = gain.pow(0.5)
         }
-        if (!inChallenge(this.layer,22)){
+        if (!inChallenge(this.layer,22)&&!inChallenge(this.layer,25)){
             gain = gain.times(new Decimal.times(challengeCompletions(this.layer,22),10).add(1))
         }
+        if (inChallenge(this.layer,23)){
+            gain = gain.pow(new Decimal(1).div(new Decimal(challengeCompletions("V",23)).plus(1)))
+        }
+        if (!inChallenge(this.layer,23)&&!inChallenge(this.layer, 25)){
+            gain = gain.times(new Decimal(10).pow(new Decimal(challengeCompletions("V",23))))
+        }
+        if (inChallenge(this.layer,24)){
+            gain = gain.div(new Decimal.log10(player.V.timePts.plus(10)))
+        }
+        if (!inChallenge(this.layer,24)&&!inChallenge(this.layer, 25)){
+            gain = gain.times(new Decimal.pow(new Decimal.log10(player.V.timePts.plus(10)), (challengeCompletions("V",24))))
+        }
+            gain = gain.pow(new Decimal(challengeCompletions("V",25)).plus(1))
+
+
+
         player[this.layer].timeGain = gain
         player[this.layer].timePts = player[this.layer].timePts.add(gain.times(diff))
 
@@ -1355,6 +1371,60 @@ addLayer("V", {
             },
             unlocked() {return hasMilestone(this.layer,2)}
         },
+        23: {
+            name: "Exponentially Scaled",
+            completionLimit: Infinity,
+            challengeDescription: function() {return "You can also gain time energy in here, but time energy production is ^1/(this challenge's completions).<br>" + format(challengeCompletions(this.layer , this.id),0) + " completions"},
+            canComplete: function() {return player.V.timePts.gte(new Decimal.pow(5 , new Decimal(challengeCompletions(this.layer,this.id)).add(1)))},
+            goalDescription: function() {return format(new Decimal.pow(5 , new Decimal(challengeCompletions(this.layer,this.id)).add(1))) + " time energy"},
+            rewardDescription: "Boost time energy production by 10^(this challenge's completions). (disabled in this challenge)",
+            onEnter(){
+                player[this.layer].timePts = new Decimal(0)
+            },
+            onExit() {
+                if (player[this.layer].timePts.gt(player[this.layer].highestTime)){
+                    player[this.layer].highestTime = new Decimal (player[this.layer].timePts)
+                }
+                player[this.layer].timePts = new Decimal(0)
+            },
+            unlocked() {return hasMilestone(this.layer,3)}
+        },
+        24: {
+            name: "What's the antonym of Synergism again...?",
+            completionLimit: Infinity,
+            challengeDescription: function() {return "You can also gain time energy in here, but time energy nerfs its own gain.<br>" + format(challengeCompletions(this.layer , this.id),0) + " completions"},
+            canComplete: function() {return player.V.timePts.gte(new Decimal.pow(5 , new Decimal(challengeCompletions(this.layer,this.id)).add(1)))},
+            goalDescription: function() {return format(new Decimal.pow(5 , new Decimal(challengeCompletions(this.layer,this.id)).add(1))) + " time energy"},
+            rewardDescription: "Time energy boosts its own gain. Effect is better the more completions you have for this challenge. (disabled in this challenge)",
+            onEnter(){
+                player[this.layer].timePts = new Decimal(0)
+            },
+            onExit() {
+                if (player[this.layer].timePts.gt(player[this.layer].highestTime)){
+                    player[this.layer].highestTime = new Decimal (player[this.layer].timePts)
+                }
+                player[this.layer].timePts = new Decimal(0)
+            },
+            unlocked() {return hasMilestone(this.layer,4)}
+        },
+        25: {
+            name: "Basically a grinding game",
+            completionLimit: Infinity,
+            challengeDescription: function() {return "You can also gain time energy in here, but all other challenge's rewards to time energy gain are disabled.<br>" + format(challengeCompletions(this.layer , this.id),0) + " completions"},
+            canComplete: function() {return player.V.timePts.gte(new Decimal.pow(100 , new Decimal(challengeCompletions(this.layer,this.id)).add(1)))},
+            goalDescription: function() {return format(new Decimal.pow(100 , new Decimal(challengeCompletions(this.layer,this.id)).add(1))) + " time energy"},
+            rewardDescription: "Time energy gain is expontented. (ENABLED in this challenge, otherwise it would just be too harsh)",
+            onEnter(){
+                player[this.layer].timePts = new Decimal(0)
+            },
+            onExit() {
+                if (player[this.layer].timePts.gt(player[this.layer].highestTime)){
+                    player[this.layer].highestTime = new Decimal (player[this.layer].timePts)
+                }
+                player[this.layer].timePts = new Decimal(0)
+            },
+            unlocked() {return hasMilestone(this.layer,5)}
+        },
     },
     milestones: {
         1: {
@@ -1366,6 +1436,21 @@ addLayer("V", {
             requirementDescription: "500 time energy",
             effectDescription: "Unlock the second INFINITELY COMPLETABLE CHALLENGE",
             done() { return player.V.timePts.gte(500) }
+        },        
+        3: {
+            requirementDescription: "10000 time energy",
+            effectDescription: "Unlock the third INFINITELY COMPLETABLE CHALLENGE",
+            done() { return player.V.timePts.gte(10000) }
+        },        
+        4: {
+            requirementDescription: "100000 time energy",
+            effectDescription: "Unlock the fourth INFINITELY COMPLETABLE CHALLENGE",
+            done() { return player.V.timePts.gte(100000) }
+        },
+        5: {
+            requirementDescription: "100000000 time energy",
+            effectDescription: "Unlock the fifth and final(?) INFINITELY COMPLETABLE CHALLENGE",
+            done() { return player.V.timePts.gte(100000000) }
         },
     },
     tabFormat: [
@@ -1391,19 +1476,64 @@ addLayer("V", {
         ["display-text",
         function() { 
             if (player[this.layer].hiTimeReward.eq(new Decimal(1))) {
-                return 'Your best time energy is currently boosting Challenge Power gain by ' + format(player.V.highestTime) + "."
+                return 'Your best time energy is currently boosting Challenge Power gain by ' + format(player.V.highestTime.times(new Decimal(Object.values(player.V.challenges).reduce((a,b) => a+b)).plus(1))) + "."
             }
             if (player[this.layer].hiTimeReward.eq(new Decimal(2))) {
-                return 'Your best time energy is currently boosting f(t) gain by ' + format(player.V.highestTime) + "."
+                return 'Your best time energy is currently boosting f(t) gain by ' + format(player.V.highestTime.times(new Decimal(Object.values(player.V.challenges).reduce((a,b) => a+b)).plus(1))) + "."
             }
             if (player[this.layer].hiTimeReward.eq(new Decimal(3))) {
-                return 'Your best time energy is currently boosting Tier 4 Power gain by ' + format(player.V.highestTime) + "."
+                return 'Your best time energy is currently boosting Tier 4 Power gain by ' + format(player.V.highestTime.times(new Decimal(Object.values(player.V.challenges).reduce((a,b) => a+b)).plus(1))) + "."
             }
         },
         { "color": "white", "font-size": "16px" }],
         "blank",
-        ["row", [["challenge", 21],["challenge", 22]]],
+        ["display-text",
+        function() { return 'You have completed the INFINITELY COMPLETABLE CHALLENGES ' + Object.values(player.V.challenges).reduce((a,b) => a+b) + " times in total, which multiplies best time energy effect by their amount."},
+        { "color": "white", "font-size": "16px" }],
+        ["row", [["challenge", 21],["challenge", 22],["challenge", 23],["challenge", 24],["challenge", 25]]],
         "milestones",
     ],
-    layerShown(){return (hasChallenge("IV",51)||hasChallenge("IV",52)||player.V.points.gte(1))}
+    layerShown(){return (hasChallenge("IV",51)||hasChallenge("IV",52)||player.V.points.gte(1))},
+    doReset(V) {
+        if(layers[V].row <= layers[this.layer].row || layers[V].row == "side")return;
+        layerDataReset("V", ["challenges","milestones","points","timePts"]);
+      },
+})
+addLayer("Inf", {
+    name: "Infinity", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "∞", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+    }},
+    color: "#FFFF00",
+    requires: new Decimal.pow(10,30800), // Can be a function that takes requirement increases into account
+    resource: "infinity points", // Name of prestige currency
+    baseResource: "best time energy", // Name of resource prestige is based on
+    baseAmount() {return player.V.highestTime}, // Get the current amount of baseResource
+    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 0.0001, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+    row: 4, // Row the layer is in on the tree (0 is the first row)
+    branches: ["V"],
+    hotkeys: [
+        {key: "I", description: "I: Metaphorically(?) go infinity", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    infoboxes: {
+        lore: {
+            title: "The end...?",
+            body: `With you gaining a lot of time energy, you finally bent the laws of time and space and went back to your home.<br>
+            The first thing you decided to check is your computer (or whatever device you are using), to see the progress of your incremental games.<br>
+            You realized that you reached the endgame of Patfr's Challenge Tree.<br>
+            You said to yourself, 'That was indeed Yet Another Challenge Tree Adventure'...`,
+        },
+    },
+    layerShown(){return new Decimal(challengeCompletions("V",25)).gte(1)}
 })
