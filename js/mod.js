@@ -13,11 +13,17 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "3.1",
-	name: "It's over already...?",
+	num: "3.2",
+	name: "OK probably one more update before I start another tree",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br>
+	<h3>v3.2: OK probably one more update before I start another tree </h3><br>
+	- Scaled the Tier 5 challenges better.<br>
+	- Changed the module for the completions of the INFINITELY COMPLETABLE CHALLENGES so they should be auto completed a bit faster now (could still be better imo).<br>
+	- Nerfed Infinity Points cost to 5e28123 in line with the changes to Tier 5 challenge scaling.<br>
+	- Tier 3 Power now buys max at default. This would be useful for people who got to tier V<br>
 	<br>
 	<h3>v3.1: It's over already...? </h3><br>
 	- Added 3 challenges to Tier 5.<br>
@@ -159,7 +165,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return (player.Inf.points.gte(2))
+	return (player.Inf.points.gte(1))
 }
 
 
