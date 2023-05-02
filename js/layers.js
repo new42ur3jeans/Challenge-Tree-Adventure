@@ -149,7 +149,7 @@ addLayer("II", {
         }
         return cpmult
     },
-    effectDescription: function() {return "which boosts Challenge Power Gain by " + player.II.points.times(this.effect()).plus(1) + "x"},
+    effectDescription: function() {return "which boosts Challenge Power Gain by " + format(player.II.points.times(this.effect()).plus(1)) + "x"},
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         if (!inChallenge("IV",22)){ 
