@@ -13,11 +13,14 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.2",
-	name: "The achievements have images now!",
+	num: "0.2.1",
+	name: "Image Hotfix",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br>
+	<h3>v0.2.1: Image Hotfix</h3><br>
+	- Fixed the image of Not-So-Rookie Numbers being wrong and Time to use Exponents' image not showing.<br>
 	<br>
 	<h3>v0.2: The achievements have images now!</h3><br>
 	- No content updated. <strike>Sue my lazy butt lol</strike><br>

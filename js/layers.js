@@ -266,14 +266,14 @@ addLayer("p", {
         24: {
             name: "Not-so Rookie Numbers",
             done() { return player.p.points.gte(10000000) },
-            image: "achImgs/p-25.png",
+            image: "achImgs/p-24.png",
             tooltip: function() {return "Get 10000000 prestige points."},
             unlocked() { return tmp.p.layerShown },
         },
         25: {
             name: "Time to use exponents",
             done() { return player.p.points.gte(new Decimal.pow(10,8)) },
-            image: "achImgs/p-26.png",
+            image: "achImgs/p-25.png",
             tooltip: function() {return "Get 1e8 prestige points."},
             unlocked() { return tmp.p.layerShown },
         },
