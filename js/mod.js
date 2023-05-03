@@ -13,11 +13,16 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1",
-	name: "Starting From the Basics",
+	num: "0.2",
+	name: "The achievements have images now!",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br>
+	<h3>v0.2: The achievements have images now!</h3><br>
+	- No content updated. <strike>Sue my lazy butt lol</strike><br>
+	- Renamed some of the achievements.<br>
+	- All 48 achievements have hand-drawn images now.<br>
 	<br>
 	<h3>v0.1: Starting From the Basics</h3><br>
 		- Added Beginning, Prestige, Boosters and Generators (I promise things will get more creative as this tree goes on).<br>
