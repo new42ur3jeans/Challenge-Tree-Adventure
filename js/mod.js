@@ -13,11 +13,14 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "3.2.1",
-	name: "A small fix before the coming of GOIME",
+	num: "3.2.2",
+	name: "The formatting can still be better",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br>
+	<h3>v3.2.2: The formatting can still be better </h3><br>
+	- Formatted Some of the Tier 5 Milestones better.<br>
 	<br>
 	<h3>v3.2.1: A small fix before the coming of GOIME </h3><br>
 	- Formatted Tier 2 Power effect.<br>

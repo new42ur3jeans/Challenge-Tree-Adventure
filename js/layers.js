@@ -1443,17 +1443,17 @@ addLayer("V", {
             done() { return player.V.timePts.gte(500) }
         },        
         3: {
-            requirementDescription: "10000 time energy",
+            requirementDescription: "10,000 time energy",
             effectDescription: "Unlock the third INFINITELY COMPLETABLE CHALLENGE (scales by ^2 every 25 completions)",
             done() { return player.V.timePts.gte(10000) }
         },        
         4: {
-            requirementDescription: "100000 time energy",
+            requirementDescription: "100,000 time energy",
             effectDescription: "Unlock the fourth INFINITELY COMPLETABLE CHALLENGE (scales by ^2 every 25 completions)",
             done() { return player.V.timePts.gte(100000) }
         },
         5: {
-            requirementDescription: "100000000 time energy",
+            requirementDescription: "1e8 time energy",
             effectDescription: "Unlock the fifth and final(?) INFINITELY COMPLETABLE CHALLENGE  (scales by ^0.5 every 25 completions)",
             done() { return player.V.timePts.gte(100000000) }
         },
