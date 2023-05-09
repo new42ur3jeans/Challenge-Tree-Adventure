@@ -13,11 +13,15 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.2.1",
-	name: "Image Hotfix",
+	num: "1.0",
+	name: "Dice and Numbers",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br>
+	<h3>v1.0: Dice and Numbers</h3><br>
+	- INTRODUCED THE DICE AND NUMBER LAYERS, FINAL FREAKING LY.<br>
+	- Game now has a total of 138 total achievements.<br>
 	<br>
 	<h3>v0.2.1: Image Hotfix</h3><br>
 	- Fixed the image of Not-So-Rookie Numbers being wrong and Time to use Exponents' image not showing.<br>
