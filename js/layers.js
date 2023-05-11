@@ -32,6 +32,7 @@ addLayer("B", {
         }],
         "blank",
         ["infobox","lore"],
+        ["infobox","lore2"],
         "blank", "blank", "blank",
         "achievements",
     ],
@@ -55,6 +56,19 @@ addLayer("B", {
             Watch out, everyone! Us Achievements shall assert our dominance as a revenge of treating us as a near-forgotten niche!<br>
             Ohohohoho, La-ti-da!
             ` },
+        },
+        lore2: {
+            title: "Plan of the Achievements",
+            body() { return `
+            So you're curious as to what we're trying to do here, huh?<br>
+            We have accumulated lots and lots of achievements together to go and raid this game.<br>
+            You remember the game Goime 500, right?<br>
+            ...Whatever, it won't mean jack now, because we'll most likely make this riot a LARGER scale than a measely 500 of us!<br>
+            We'll only stop when enough of our req- I mean DEMANDS, are fulfilled.<br>
+            Better get busy and nobody would get hurt from us!<br>
+            ARGH-HAHAHAHAHA!
+            ` },
+            unlocked() {return hasAchievement(this.layer,36)}
         },
     },
     achievements: {
@@ -175,6 +189,13 @@ addLayer("B", {
             done() { return (player.d.unlocked)||(player.n.unlocked)},
             image: "achImgs/b-35.png",
             tooltip: "Unlock a Row3 Layer.<br>Reward: Keep Row 2 achievements in Row 3 Resets.",
+            unlocked() { return true },
+        },
+        36:{
+            name: "The second piece of lore",
+            done() { return (player.d.points.gte(30))||(player.n.points.gte(30))},
+            image: "achImgs/b-36.png",
+            tooltip: "Get 30 Dice AND Digits.",
             unlocked() { return true },
         },
     },
@@ -1742,8 +1763,8 @@ addLayer("n", {
             unlocked() { return tmp.n.layerShown },
         },
         56: {
-            name: "How many achievements did you get in this layer?",
-            done() { return player[this.layer].inputNumber == tmp[this.layer].achsCompleted},
+            name: "The puzzle game Gabriele Cirulli made",
+            done() { return player[this.layer].inputNumber == 2048},
             image: "achImgs/n-41.png",
             tooltip: "Answer the title",
             unlocked() { return tmp.n.layerShown },
@@ -1767,6 +1788,13 @@ addLayer("n", {
             done() { return player[this.layer].inputNumber == 777},
             image: "achImgs/n-41.png",
             tooltip: "Input 777",
+            unlocked() { return tmp.n.layerShown },
+        },
+        64: {
+            name: "The year The Reimagined Bowlerville (webcomic) released",
+            done() { return player[this.layer].inputNumber == 2022},
+            image: "achImgs/n-41.png",
+            tooltip: "Answer the title",
             unlocked() { return tmp.n.layerShown },
         },
     },

@@ -13,11 +13,16 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.0",
-	name: "Dice and Numbers",
+	num: "1.1",
+	name: "New Lore and New Clumsy Mistakes",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<br>
+	<h3>v1.1: New Lore and New Clumsy Mistakes</h3><br>
+	- Finally remembered to change the endgame.<br>
+	- Achievement N-56 is modified to prevent new players from getting it as a freebie. A new Number Trivia Achievement is also added.<br>
+	- A new lore infobox and an achievement to unlock said infobox (in the Beginning layer) is included.
 	<br>
 	<h3>v1.0: Dice and Numbers</h3><br>
 	- INTRODUCED THE DICE AND NUMBER LAYERS, FINAL FREAKING LY.<br>
@@ -79,12 +84,12 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"Estimated Endgame: Get '5^2' and 'Completely Passive Player' "
+	"Estimated Endgame: Get 'The second piece of lore' "
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return (hasAchievement("b2",14) && hasAchievement("g",14))
+	return (hasAchievement("B",36))
 }
 
 
