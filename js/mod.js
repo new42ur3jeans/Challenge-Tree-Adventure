@@ -5,7 +5,7 @@ let modInfo = {
 	pointsName: "floors",
 	modFiles: ["layers.js", "tree.js"],
 
-	discordName: "42UR3ified_Ecolo#4052",
+	discordName: "the42ur3genes",
 	discordLink: "https://discord.gg/ACfnuRpVSC",
 	initialStartPoints: new Decimal (0), // Used for hard resets and new players
 	offlineLimit: 0,  // In hours
@@ -13,11 +13,15 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1",
-	name: "Literally Cyberpunk 2077",
+	num: "0.2",
+	name: "The Ride still feels a bit wrong",
 }
 
-let changelog = `<h1>Changelog:</h1><br>	
+let changelog = `<h1>Changelog:</h1><br>
+	<h3>0.2: The Ride still feels a bit wrong </h3><br>
+	- Floor 2 is now functional.<br>
+	- Reformed the floor progression.<br>
+	- v1.0 is when Floor 3 and lore of this game is released.<br>
 	<br>
 	<h3>0.1: Literally Cyberpunk 2077 </h3><br>
 	- Got forced by some people to release a playable beta<br>
@@ -45,16 +49,10 @@ function getPointGen() {
 
 	let gain = new Decimal(0.05)
 	gain = gain.times(new Decimal.add(1,tmp.p.effect))
+	gain = gain.times(new Decimal.add(getBuyableAmount("b", 21),1).times(new Decimal.times(getBuyableAmount("b", 22),2).max(1)).times(new Decimal.times(getBuyableAmount("b", 31),3).max(1)))
 	//scaling
-	if (player.points.gte(1)){
-		gain = gain.div(100000)
-	}
-	if (player.points.gte(2)){
-		gain = gain.div(100000)
-	}
-	if (player.points.gte(3)){
-		gain = gain.div(100000)
-	}
+	gain = gain.div(new Decimal.pow(100000, player.points.floor()))
+	gain = gain.min(1)
 	return gain
 	
 }
@@ -65,12 +63,12 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	"For every floor the elevator's speed is divided by 100000!<br>Also the endgame is 2 floors for now"
+	"For every floor the elevator's speed is divided by 100000!<br>Also the endgame is 3 floors for now"
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("2"))
+	return player.points.gte(new Decimal("3"))
 }
 
 
