@@ -8,18 +8,25 @@ let modInfo = {
 	discordName: "The42ur3Genes (His server DOES NOT talk about his incremental games)",
 	discordLink: "https://discord.gg/mec46rhJ",
 	initialStartPoints: new Decimal (10), // Used for hard resets and new players
-	offlineLimit: 1,  // In hours
+	offlineLimit: 0,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.1",
-	name: "Small Testflight",
+	num: "0.0.1XL",
+	name: "Not like it's THAT much of an excel",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br>
 	<h2>VERSION NUMBER EXPLANATION: v(Completed Chapters).(Completed Layers).(Update number relative to Completed Layers)</h2> <br>
+	<br>
+	<h3>v0.0.1XL (Not like it's THAT much of an excel)</h3><br>
+	<br>
+		- Added 2 webcomic pages.<br>
+		- Added 2 buyables.<br>
+		- Introduced Cherresher.<br>
+		- Edited the endgame.<br>
 	<br>
 	<h3>v0.0.1 (Small Testflight)</h3><br>
 	<br>
@@ -72,7 +79,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("e280000000"))
+	return player.plus.points.gte(new Decimal("6"))
 }
 
 

@@ -98,7 +98,7 @@ addLayer("WCm", {
             doneTooltip: "Finally, the number started to go up!!!",
         },
         14: {
-            name: "4 (TBA)",
+            name: "4",
             done() { return player.plus.points.gte(5) },
             onComplete() { 
                 player.WCm.points = player.WCm.points.add(1);
@@ -107,21 +107,23 @@ addLayer("WCm", {
             goalTooltip: "Get 5 adders.",
             doneTooltip: "Ok, this is getting too slow for other incremental games' standards.",
         },
+        15: {
+            name: "5",
+            done() { return new Decimal(getBuyableAmount("plus",11)).gte(10) },
+            onComplete() { 
+                player.WCm.points = player.WCm.points.add(1);
+                player.WCm.currentPage = new Decimal(5)
+            },
+            goalTooltip: "Buy 10 Adder Adder buyables.",
+            doneTooltip: "That won't be enough for getting the 6th adder.",
+        },
     },
     tabFormat: [
         "blank",
         ["display-text",function() { return '<b>You are reading page ' + player.WCm.currentPage + "</b>"}],
         "blank",
         ["display-image",function() {
-            if (player.WCm.currentPage.equals(new Decimal(1))) {
-                return 'webcomic/Page1.png'   
-            }
-            if (player.WCm.currentPage.equals(new Decimal(2))) {
-                return 'webcomic/Page2.png'   
-            }
-            if (player.WCm.currentPage.equals(new Decimal(3))) {
-                return 'webcomic/Page3.png'   
-            }
+                return 'webcomic/Page'+ Number(player.WCm.currentPage) + '.png'   
         },{ 'height': '1500px', 'width': '750px', position: 'relative'}],
         "blank",
         "clickables",

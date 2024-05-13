@@ -23,6 +23,7 @@ addLayer("plus", {
     }, // Prestige currency exponent
     effect(){
         let gain = player.plus.bestPoints
+        gain = gain.times(tmp.plus.buyables[11].effect.plus(1))
         return gain
     },
     effectDescription: function(){
@@ -45,11 +46,48 @@ addLayer("plus", {
         "blank",
         ["display-text",function() { return 'Your best number of adders is ' + player.plus.bestPoints + ""}],
         "blank",
-        "milestones",
+        "buyables",
         "blank",
         "blank",
         "upgrades"
     ],
+    buyables: {
+        11: {
+            cost(x) { return new Decimal(50).times(x.plus(1)) },
+            title: "Adder Adder",
+            display() { return "Adds " + tmp[this.layer].buyables[this.id].effect + " to Adders' base effect.<br>Cost: " + tmp[this.layer].buyables[this.id].cost + " of your Number<br>You have " + getBuyableAmount(this.layer, this.id) + " of this buyable" },
+            effect() {
+                let gain = new Decimal(getBuyableAmount(this.layer, this.id))
+                gain = gain.times(tmp[this.layer].buyables[12].effect.plus(1))
+                return gain
+            },
+            canAfford() { return player.points.gte(this.cost()) },
+            buy() {
+                player.points = player.points.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            unlocked() {
+                return hasAchievement("WCm", 14)
+            }
+        },
+        12: {
+            cost(x) { return new Decimal(500).times(x.plus(1)) },
+            title: "Adder^3",
+            display() { return "Adds " + tmp[this.layer].buyables[this.id].effect + " to Adder Adder's base effect.<br>Cost: " + tmp[this.layer].buyables[this.id].cost + " of your Number<br>You have " + getBuyableAmount(this.layer, this.id) + " of this buyable" },
+            effect() {
+                let gain = new Decimal(getBuyableAmount(this.layer, this.id))
+                return gain
+            },
+            canAfford() { return player.points.gte(this.cost()) },
+            buy() {
+                player.points = player.points.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            unlocked() {
+                return hasAchievement("WCm", 15)
+            }
+        },
+    },
     update(diff){
         if (player.plus.bestPoints.lt(player.plus.points)){
             player.plus.bestPoints = player.plus.points
