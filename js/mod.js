@@ -82,7 +82,7 @@ var displayThings = [
 			return "Chapter 0: The Prologue"
 		}
 		if (player.WCm.chapterNo == (1) ){
-			return "Chapter 1: The Land of the Operators"
+			return "Chapter 1: The Land of the Operators<br>If some layers are invisible refresh until you can see them"
 		}
 	}
 ]
