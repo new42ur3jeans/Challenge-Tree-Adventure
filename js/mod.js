@@ -13,13 +13,21 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.1XL",
-	name: "Not like it's THAT much of an excel",
+	num: "0.1.1",
+	name: "Multiplied Taste",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<br>
 	<h2>VERSION NUMBER EXPLANATION: v(Completed Chapters).(Completed Layers).(Update number relative to Completed Layers)</h2> <br>
+	<br>
+	<h3>v0.1.1 (Multiplied taste)</h3><br>
+	<br>
+		- Added 4 webcomic pages.<br>
+		- Added the Multiplication Layer and Multiplier.<br>
+		- Added a Multiplication Milestone.<br>
+		- Added some formats here and there.<br>
+		- Edited the endgame to 9 unlocked webcomic pages.<br>
 	<br>
 	<h3>v0.0.1XL (Not like it's THAT much of an excel)</h3><br>
 	<br>
@@ -57,6 +65,7 @@ function getPointGen() {
 	}
 	else if (player.WCm.chapterNo.equals(new Decimal(1))){
 	let gain = tmp.plus.effect
+	gain = gain.times(tmp.mul.effect)
 	return gain
 	}
 }
@@ -79,7 +88,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.plus.points.gte(new Decimal("6"))
+	return hasAchievement("WCm",21)
 }
 
 
@@ -88,8 +97,8 @@ function isEndgame() {
 
 // Style for the background, can be a function
 var backgroundStyle = function(){
-	if (player.WCm.chapterNo.equals(0)) return {"background-image": "linear-gradient(rgb(0,100,100), rgb(0,80,170))"}
 	if (player.WCm.chapterNo.equals(1)) return {"background-image": "linear-gradient(rgb(0,100,100), rgb(0,170,0))"}
+	else return {"background-image": "linear-gradient(rgb(0,100,100), rgb(0,80,170))"}
 }
 
 // You can change this if you have things that can be messed up by long tick lengths

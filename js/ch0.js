@@ -104,8 +104,8 @@ addLayer("WCm", {
                 player.WCm.points = player.WCm.points.add(1);
                 player.WCm.currentPage = new Decimal(4)
             },
-            goalTooltip: "Get 5 adders.",
-            doneTooltip: "Ok, this is getting too slow for other incremental games' standards.",
+            goalTooltip: "Get 5 adders.<br>REWARD: Unlock a buyable.",
+            doneTooltip: "Ok, this is getting too slow for other incremental games' standards. Have a buyable.",
         },
         15: {
             name: "5",
@@ -114,8 +114,48 @@ addLayer("WCm", {
                 player.WCm.points = player.WCm.points.add(1);
                 player.WCm.currentPage = new Decimal(5)
             },
-            goalTooltip: "Buy 10 Adder Adder buyables.",
-            doneTooltip: "That won't be enough for getting the 6th adder.",
+            goalTooltip: "Buy 10 Adder Adder buyables.<br>REWARD: One buyable isn't enough, how about another?",
+            doneTooltip: "That won't be enough for getting the 6th adder. Here's another one.",
+        },
+        16: {
+            name: "6",
+            done() { return player.plus.points.gte(6) },
+            onComplete() { 
+                player.WCm.points = player.WCm.points.add(1);
+                player.WCm.currentPage = new Decimal(6)
+            },
+            goalTooltip: "Get 6 adders.<br>REWARD: Unlock the next layer.",
+            doneTooltip: "Because what Addition can do is limited",
+        },
+        17: {
+            name: "7",
+            done() { return player.mul.points.gte(1) },
+            onComplete() { 
+                player.WCm.points = player.WCm.points.add(1);
+                player.WCm.currentPage = new Decimal(7)
+            },
+            goalTooltip: "Get a multiplier.",
+            doneTooltip: "Addition Buyables but weaker in a sense",
+        },
+        18: {
+            name: "8",
+            done() { return player.mul.points.gte(3) },
+            onComplete() { 
+                player.WCm.points = player.WCm.points.add(1);
+                player.WCm.currentPage = new Decimal(8)
+            },
+            goalTooltip: "Get 3 multipliers.<br>REWARD: Unlocks a milestone.",
+            doneTooltip: "Damn Miles looks fine",
+        },
+        21: {
+            name: "9",
+            done() { return hasMilestone("mul",0) },
+            onComplete() { 
+                player.WCm.points = player.WCm.points.add(1);
+                player.WCm.currentPage = new Decimal(9)
+            },
+            goalTooltip: "Get the first multiplier milestone.",
+            doneTooltip: "Finally, less clicking!",
         },
     },
     tabFormat: [
