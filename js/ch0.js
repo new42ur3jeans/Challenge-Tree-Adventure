@@ -6,7 +6,7 @@ addLayer("WCm", {
         unlocked: true,
 		points: new Decimal(0),
         currentPage: new Decimal(1),
-        chapterNo: new Decimal(0),
+        chapterNo: 0,
     }},
     color: "#4BDC13",
     requires: new Decimal(10), // Can be a function that takes requirement increases into account
@@ -26,8 +26,8 @@ addLayer("WCm", {
     clickables: {
         11: {
             display() {return "Get started on your journey!"},
-            canClick() {return (player.WCm.chapterNo.equals(0))},
-            unlocked() {return (player.WCm.chapterNo.equals(0))}, 
+            canClick() {return (player.WCm.chapterNo == (0))},
+            unlocked() {return (player.WCm.chapterNo == (0))}, 
             onClick() {
                 player.WCm.chapterNo = new Decimal(1);
             },
@@ -35,7 +35,7 @@ addLayer("WCm", {
         21: {
             display() {return "<<"},
             canClick() {return ((player.WCm.currentPage.gt(1)))},
-            unlocked() {return (player.WCm.chapterNo.gt(0))}, 
+            unlocked() {return (player.WCm.chapterNo > 0)}, 
             tooltip: "Head to page 1",
             onClick() {
                 player.WCm.currentPage = new Decimal(1);
@@ -44,7 +44,7 @@ addLayer("WCm", {
         22: {
             display() {return "<"},
             canClick() {return ((player.WCm.currentPage.gt(1)))},
-            unlocked() {return (player.WCm.chapterNo.gt(0))}, 
+            unlocked() {return (player.WCm.chapterNo > 0)}, 
             onClick() {
                 player.WCm.currentPage = player.WCm.currentPage.sub(1);
             },
@@ -52,7 +52,7 @@ addLayer("WCm", {
         23: {
             display() {return ">"},
             canClick() {return ((player.WCm.currentPage.lt(player.WCm.points)))},
-            unlocked() {return (player.WCm.chapterNo.gt(0))}, 
+            unlocked() {return (player.WCm.chapterNo > 0)}, 
             tooltip: "Head to page 1",
             onClick() {
                 player.WCm.currentPage = player.WCm.currentPage.add(1);
@@ -61,7 +61,7 @@ addLayer("WCm", {
         24: {
             display() {return ">>"},
             canClick() {return ((player.WCm.currentPage.lt(player.WCm.points)))},
-            unlocked() {return (player.WCm.chapterNo.gt(0))}, 
+            unlocked() {return (player.WCm.chapterNo > 0)}, 
             onClick() {
                 player.WCm.currentPage = player.WCm.points
             },
@@ -79,7 +79,7 @@ addLayer("WCm", {
         },
         12: {
             name: "2",
-            done() { return player.WCm.chapterNo.gt(0) },
+            done() { return player.WCm.chapterNo > 0 },
             onComplete() { 
                 player.WCm.points = player.WCm.points.add(1);
                 player.WCm.currentPage = new Decimal(2)

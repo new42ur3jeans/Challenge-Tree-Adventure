@@ -98,7 +98,7 @@ addLayer("plus", {
             buyBuyable(this.layer,12)
         }
     },    
-    layerShown(){return player.WCm.chapterNo.equals(1)}
+    layerShown(){return player.WCm.chapterNo == 1 }
 })
 
 addLayer("mul", {
@@ -181,5 +181,5 @@ addLayer("mul", {
             player.mul.bestPoints = player.mul.points
         }
     },    
-    layerShown(){return (player.WCm.chapterNo.equals(1) && hasAchievement("WCm",16))}
+    layerShown(){return (player.WCm.chapterNo == 1  && hasAchievement("WCm",16))}
 })

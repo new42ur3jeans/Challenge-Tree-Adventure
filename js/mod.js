@@ -64,7 +64,7 @@ function getPointGen() {
 	if(!canGenPoints()){
 		return new Decimal(0)
 	}
-	else if (player.WCm.chapterNo.equals(new Decimal(1))){
+	else if (player.WCm.chapterNo == 1 ){
 	let gain = tmp.plus.effect
 	gain = gain.times(tmp.mul.effect)
 	return gain
@@ -78,10 +78,10 @@ function addedPlayerData() { return {
 // Display extra things at the top of the page
 var displayThings = [
 	function(){
-		if ((player.WCm.chapterNo.equals(new Decimal(0)))){
+		if (player.WCm.chapterNo == (0) ){
 			return "Chapter 0: The Prologue"
 		}
-		if ((player.WCm.chapterNo.equals(new Decimal(1)))){
+		if (player.WCm.chapterNo == (1) ){
 			return "Chapter 1: The Land of the Operators"
 		}
 	}
@@ -98,8 +98,8 @@ function isEndgame() {
 
 // Style for the background, can be a function
 var backgroundStyle = function(){
-	if (player.WCm.chapterNo.equals(0)) return {"background-image": "linear-gradient(rgb(0,100,100), rgb(0,80,170))"}
-	if (player.WCm.chapterNo.equals(1)) return {"background-image": "linear-gradient(rgb(0,100,100), rgb(0,170,0))"}
+	if (player.WCm.chapterNo == 0 ) return {"background-image": "linear-gradient(rgb(0,100,100), rgb(0,80,170))"}
+	if (player.WCm.chapterNo == 1 ) return {"background-image": "linear-gradient(rgb(0,100,100), rgb(0,170,0))"}
 	
 }
 
