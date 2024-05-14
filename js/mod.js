@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1.1",
+	num: "0.1.1(Hotfix 1)",
 	name: "Multiplied Taste",
 }
 
@@ -28,6 +28,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added a Multiplication Milestone.<br>
 		- Added some formats here and there.<br>
 		- Edited the endgame to 9 unlocked webcomic pages.<br>
+		- (HOTFIX 1): Hopefully fixes an issue where the Addition Layer occasionally does not show up.
 	<br>
 	<h3>v0.0.1XL (Not like it's THAT much of an excel)</h3><br>
 	<br>
@@ -97,8 +98,9 @@ function isEndgame() {
 
 // Style for the background, can be a function
 var backgroundStyle = function(){
+	if (player.WCm.chapterNo.equals(0)) return {"background-image": "linear-gradient(rgb(0,100,100), rgb(0,80,170))"}
 	if (player.WCm.chapterNo.equals(1)) return {"background-image": "linear-gradient(rgb(0,100,100), rgb(0,170,0))"}
-	else return {"background-image": "linear-gradient(rgb(0,100,100), rgb(0,80,170))"}
+	
 }
 
 // You can change this if you have things that can be messed up by long tick lengths
